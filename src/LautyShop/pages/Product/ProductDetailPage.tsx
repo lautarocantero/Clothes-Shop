@@ -53,12 +53,14 @@ const ProductDetailPage = () => {
                     item
                     sx={{
                         gridArea: 'imagen',
+                        maxHeight: {xs: '300px', md: 'none'},
                         height: {xs: '300px', md: 'auto'},
                         display: 'flex',
                         justifyContent: 'center',
                         mt: '10px',
                         backgroundColor: theme => theme?.custom?.white,
                         borderRadius: '5px',
+                        overflow: 'hidden',
                     }}
                     className="animate__animated animate__fadeIn"
                 >

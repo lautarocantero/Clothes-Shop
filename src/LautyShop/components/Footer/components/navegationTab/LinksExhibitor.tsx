@@ -13,10 +13,10 @@ const LinksExhibitor = ({ links }: { links: NavBarLink[] }) => {
                 <Link
                     component={LinkReactRouter} 
                     color='inherit' 
-                    to={`/${link?.linkUrl}`}  
+                    to={link?.linkUrl === '/' ? '/' : `/${link?.linkUrl}`} 
                     sx={{ 
                         color: theme => theme?.custom?.white,
-                        fontSize: theme => theme?.typography?.body1?.fontSize?.fontSize,
+                        fontSize: theme => theme?.typography?.body1?.fontSize,
                         textAlign: 'left',
                         textDecoration: 'none',
                         marginTop: '10px'

@@ -1,27 +1,7 @@
 import type { Dispatch } from "@reduxjs/toolkit"
-import { LoginWithEmailPassword, logoutFirebase, registerUserWithEmailPassword, singInWithGoogle } from "../../firebase/providers"
+import { LoginWithEmailPassword, logoutFirebase, RegisterUserWithEmailPassword } from "../../firebase/providers"
 import { checkingCredentials, clearAuthError, login, logout } from "./authSlice";
-
-
-export const startGoogleSignIn = () => {
-    return async (dispatch: Dispatch) => {
-        const response = await singInWithGoogle();
-
-        if(!response?.ok) {
-            dispatch(logout({
-                errorMessage: response?.errorMessage
-            }))
-            return;
-        }
-
-        const {displayName, email, photoURL, uid} = response;
-
-        dispatch(login({
-            displayName, email, photoURL, uid
-        }))
-
-    }
-}
+import { useNavigate } from "react-router-dom";
 
 interface startSignInEmail {
     email: string;
@@ -31,7 +11,6 @@ interface startSignInEmail {
 export const startLoginWithEmailPassword = ({email, password}: startSignInEmail ) => {
     return async(dispatch: Dispatch) => {
         dispatch(checkingCredentials());
-        console.log('email', email);
         const {errorMessage, displayName, ok, photoURL, uid} = await LoginWithEmailPassword({email,password});
 
         if(!ok) return dispatch(logout({errorMessage}));
@@ -46,18 +25,15 @@ interface createUserEmailPassword extends startSignInEmail {
 }
 
 export const startCreateUserWithEmailAndPassword = ({email, password, displayName}: createUserEmailPassword ) => {
-
     return async(dispatch: Dispatch) => {
         dispatch(checkingCredentials());
 
-        const {ok, uid, photoURL, errorMessage} = await  registerUserWithEmailPassword({email, password, displayName});
-    
+        const {ok, uid, photoURL, errorMessage} = await  RegisterUserWithEmailPassword({email, password, displayName});
         if(!ok) {
             return dispatch(logout({errorMessage: errorMessage?.message}))
         };
 
         dispatch(login({uid, displayName, email, photoURL}));
-
     }
 
 }

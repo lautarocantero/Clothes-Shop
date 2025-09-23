@@ -1,5 +1,5 @@
-import { Box, Button, GridLegacy as Grid, TextField, Typography } from "@mui/material"
-import { clearAuthError, startCreateUserWithEmailAndPassword, type RootState } from "../../../store/auth";
+import { Box, Button, GridLegacy as Grid, TextField } from "@mui/material"
+import { startCleanAuthMessage, startCreateUserWithEmailAndPassword, type RootState } from "../../../store/auth";
 import { useDispatch, useSelector } from "react-redux"
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom"
@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import AuthLayout from "../../layout/AuthLayout"
 import React, { useEffect, useState } from "react";
 import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
-import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
+import ErrorExpositure from "../helpers/ErrorExpositure";
 
   const getInitialValues = () => ({
     email: '',
@@ -31,7 +31,7 @@ import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
       }),
   );
 
-  const FormFields = React.memo(({
+  const FormFields = ({
     displayName,
     email, 
     password, 
@@ -100,15 +100,7 @@ import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
               helperText={(errors?.repeatPassword)?.toString()}
             />
           </Grid>
-          {
-            errorMessage !== '' && (
-              <Grid item xs={12} sm={12} mt={2}>
-                <Typography sx={{ color: theme => theme?.palette?.primary?.main}} component={'h5'}> 
-                  {getFirebaseErrorMessage(errorMessage)}
-                </Typography>
-              </Grid>
-            )
-          }
+          <ErrorExpositure errorMessage={errorMessage} />
           <Grid container display={'flex'} gap={{xs: 2, md: 0}}
             sx={{
               mt: 2,
@@ -137,7 +129,7 @@ import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
             </Grid>
         </Grid>
     )
-  })
+  }
 
 const RegisterPage = () => {
 
@@ -147,22 +139,18 @@ const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState(errorFromStore ?? '');
 
   useEffect(() => {
-    dispatch(clearAuthError());
-  }, []);
-
-  useEffect(() => {
     setErrorMessage(errorFromStore ?? '');
   }, [errorFromStore]);
 
   const onRegister = ({displayName, email, password}: RegisterProps) => {
       dispatch(startCreateUserWithEmailAndPassword({ email, password, displayName }) as any);
-      navigate('/');
   }
 
   const onGoBack = () => {
     navigate('/auth/login', {
       replace: true,
     });
+    dispatch(startCleanAuthMessage() as any);
   }
 
   const { handleSubmit, values, setFieldValue, errors} = 
@@ -185,7 +173,7 @@ const RegisterPage = () => {
       <Box 
         component={"form"}
         onSubmit={handleSubmit} 
-        sx={{ backgroundColor: theme => theme?.custom?.white, width: {xs: '100%',md:'50%'}, margin: '0 auto' }} 
+        sx={{ backgroundColor: theme => theme?.custom?.white, width: {xs: '100%',md:'30%'}, margin: '0 auto' }} 
         p={2} 
       >
         <FormFields 

@@ -23,7 +23,7 @@ const LautyShopPage = () => {
             component="span" 
             sx={{ color: theme => theme?.palette?.primary?.main, fontSize: theme => theme?.typography?.h1?.fontSize }}
           >
-            CLOTHES
+            Legacy
           </Typography>
 
           <Typography 

@@ -1,13 +1,12 @@
 import { Box, Button, GridLegacy as Grid, Link, TextField, Typography } from "@mui/material";
-// import GoogleIcon from '@mui/icons-material/Google';
-import * as Yup from 'yup';
+import { startCleanAuthMessage, startLoginWithEmailPassword, type RootState } from "../../../store/auth";
 import { Link as LinkRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearAuthError, startGoogleSignIn, startLoginWithEmailPassword, type RootState } from "../../../store/auth";
-import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
+import { useFormik } from "formik";
+import * as Yup from 'yup';
 import AuthLayout from "../../layout/AuthLayout";
+import ErrorExpositure from "../helpers/ErrorExpositure";
 
 
   const getInitialValues = () => ({
@@ -25,23 +24,15 @@ import AuthLayout from "../../layout/AuthLayout";
         password: Yup.string().required('Campo obligatorio'),
       }),
   );
-
-const LoginPage = () => {
+  
+  const LoginPage = () => {
     const dispatch = useDispatch();
     const errorFromStore = useSelector((state: RootState) => state.auth.errorMessage);
     const [errorMessage, setErrorMessage] = useState(errorFromStore ?? '');
-
-    useEffect(() => {
-      dispatch(clearAuthError());
-    }, []);
     
     useEffect(() => {
         setErrorMessage(errorFromStore ?? '');
     }, [errorFromStore]);
-
-    const onGoogleSingIn = () => {
-      dispatch(startGoogleSignIn() as any);
-    }
 
     const onLogin = ({ email, password }: { email: string; password: string }) => {
       dispatch(startLoginWithEmailPassword({email, password}) as any);
@@ -101,26 +92,8 @@ const LoginPage = () => {
                 helperText={(errors?.password)?.toString()}
               />
             </Grid>
-            {
-              errorMessage !== '' && (
-                <Grid item xs={12} sm={12} mt={2}>
-                  <Typography sx={{ color: theme => theme?.palette?.primary?.main}} component={'h5'}> 
-                    {getFirebaseErrorMessage(errorMessage)}
-                  </Typography>
-                </Grid>
-              )
-            }
+            <ErrorExpositure errorMessage={errorMessage}/>
             <Grid container direction={'column'} spacing={2} sx={{ mt: 2}}>
-              <Grid item xs={12} sm={6}>
-                <Button
-                fullWidth
-                variant='contained'
-                onClick={onGoogleSingIn}
-                >
-                  {/* <GoogleIcon/> */}
-                  Google
-                </Button>
-              </Grid>
               <Grid item xs={12} sm={6}>
                 <Button
                 fullWidth
@@ -132,7 +105,7 @@ const LoginPage = () => {
               </Grid>
 
               <Grid container direction={'row'} justifyContent={'end'} sx={{ mt: 2}}>
-                <Link component={LinkRouter} to={'/auth/register'}>
+                <Link component={LinkRouter} to={'/auth/register'} onClick={() => dispatch(startCleanAuthMessage() as any)}>
                   <Typography sx={{ color: theme => theme?.custom?.accent }}>Crear cuenta</Typography>
                 </Link>
               </Grid>

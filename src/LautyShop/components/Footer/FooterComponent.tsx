@@ -1,11 +1,10 @@
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import type { contactMethodsType, logosArrayType, socialMediaLink } from './types';
 import type { AppBarColor, NavBarLink } from '../NavBar/types';
 import NavegationTab from './components/navegationTab/NavegationTab';
 import ContactTab from './components/contactTab/ContactTab';
 import PaymentMethodsTab from './components/paymentMethodsTab/PaymentMethodsTab';
 import SocialMediaTab from './components/socialMediaTab/SocialMediaTab';
-// import { paymentMethodsIcons } from './data/footerData';
 
 interface FooterInterface {
   color?: AppBarColor,
@@ -74,5 +73,3 @@ return (
 }
 
 export default FooterComponent
-
- {/* agregar links de doned los saque <a target="_blank" href="https://icons8.com/icon/85154/instagram">Instagram</a> icono de <a target="_blank" href="https://icons8.com">Icons8</a> */}

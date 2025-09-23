@@ -2,19 +2,9 @@ import { Box, Button, GridLegacy as Grid, Typography } from "@mui/material";
 import LautyShopLayout from "../../layout/LautyShopLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setCart, startLoadingUsers, startRemoveFromCart, type RootState } from "../../../store/users";
+import { startBuyCart, startLoadingCart, startRemoveFromCart, type RootState } from "../../../store/users";
 import { type RootState as authRoot} from '../../../store/auth';
 import type { productType } from "../LautyShopPage/types/productTypes";
-
-type ProductData = {
-  id: string;
-  stock: number;
-  price: number;
-  title: string;
-  type: string;
-  imagesUrl: string;
-  size: string;
-};
 
 interface ProductsExhibitorProps {
   products: productType[];
@@ -26,7 +16,7 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
   if (!Array.isArray(products) || products.length === 0) return null;
 
   return (
-    <Grid item sx={{ borderBottom: '1px solid black', paddingBottom: 2 }}>
+    <Grid item>
       {products.map(({ id, imagesUrl, title, price, stock, size }) => (
         <Grid
           key={id}
@@ -37,24 +27,35 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
           sx={{
             padding: 2,
             margin: '0 auto',
+            minHeight: {xs:'none', md:'300px'},
+            maxHeight: {xs:'none', md:'300px'},
             borderBottom: '1px dashed #ccc',
             boxSizing: 'border-box',
           }}
         >
           <Grid item xs={3} sm={2}>
             <Box
-              component="img"
-              src={imagesUrl}
-              alt={title ?? 'Producto'}
               sx={{
                 width: '100%',
-                height: 'auto',
+                aspectRatio: '1 / 1',
                 borderRadius: 1,
-                objectFit: 'cover',
-                minHeight: 100,
-                padding: 'none',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            />
+            >
+              <Box
+                component="img"
+                src={imagesUrl}
+                alt={title ?? 'Producto'}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </Box>
           </Grid>
 
           <Grid
@@ -68,8 +69,18 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
               alignSelf: 'flex-start',
             }}
           >
-            <Typography variant="subtitle1" sx={{textAlign:'left'}} >{title}</Typography>
-
+            <Typography
+              variant="subtitle1"
+              sx={(theme) => ({
+                textAlign: 'left',
+                fontSize: {
+                  xs: theme.typography.h6.fontSize,
+                  md: theme.typography.h3.fontSize,
+                },
+              })}
+            >
+              {title}
+            </Typography>
             <Button
               onClick={() => onRemoveProduct({productId: id, cart: products})}
               sx={{
@@ -88,7 +99,7 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
             <Typography
               variant="subtitle1"
               sx={{
-                alignSelf: { xs: 'flex-end', sm: 'flex-start' },
+                alignSelf: 'flex-end',
               }}
             >
               <strong>${price}</strong>
@@ -111,21 +122,26 @@ const calculateTotalAmount = (cart: productType[]) => {
 
 interface CartFooterProps {
   cart: any;
+  handleBuyCart: () => void;
 }
 
-const CartFooter = ({ cart }: CartFooterProps) => {
+const CartFooter = ({ cart, handleBuyCart }: CartFooterProps) => {
   if (!cart || cart?.length === 0) return null;
 
   const total = calculateTotalAmount(cart);
 
   return (
-    <Grid item>
+    <Grid item mt={{xs:'20', md:'5'}}>
       <Grid item xs={12} display={'flex'} flexDirection={'row'} justifyContent={'end'} mt={3} width={'95%'}>
         <Typography component={'span'} sx={{ backgroundColor: theme => theme?.custom?.lightGray, borderRadius: '5%', color: theme => theme?.custom?.white, padding: 1}}>Total: <b>${total}</b></Typography>
       </Grid>
 
       <Grid item xs={12} display={'flex'} flexDirection={'row'} justifyContent={'end'} mt={3} width={'95%'}>
-        <Button  sx={{ backgroundColor: theme => theme?.palette?.primary?.main, color: theme => theme?.custom?.white, padding: 1.5}}>Comprar</Button>
+        <Button  
+          onClick={handleBuyCart}
+          sx={{ backgroundColor: theme => theme?.palette?.primary?.main, color: theme => theme?.custom?.white, padding: 1.5}}>
+          Comprar
+        </Button>
       </Grid>
     </Grid>
   );
@@ -143,10 +159,19 @@ const ShoppingCartPage = () => {
     if (!productToRemove) return;
     dispatch(startRemoveFromCart(productToRemove) as any)
   }
+
+  const handleBuyCart = async() => {
+    const response = await dispatch(startBuyCart() as any);
+    if(response){
+      alert('Se ha realizado la compra!');
+      return;
+    }
+    alert('Ocurrio un error en el proceso de compra');
+  }
   
     useEffect(() => {
       if (!id) return; 
-      dispatch(startLoadingUsers(id) as any);
+      dispatch(startLoadingCart({id} as any) as any);
     }, [dispatch, id]);
   
 
@@ -156,12 +181,8 @@ const ShoppingCartPage = () => {
         component={"div"}
         sx={{ margin: "110px auto 50px", width: { xs: "95%", md: "60%" } }}
       >
-        <Grid
-          container
-          display={"flex"}
-          flexDirection={"column"}
-        >
-          <Grid
+        <Grid container display={"flex"}flexDirection={"column"}>
+          <Grid item
             sx={{
               backgroundColor: (theme) => theme?.palette?.primary?.main,
               color: (theme) => theme?.custom?.white,
@@ -183,8 +204,12 @@ const ShoppingCartPage = () => {
               <strong>Mi carrito</strong>
             </Typography>
           </Grid>
-          <ProductsExhibitor products={cart} onRemoveProduct={removeFromCart} />
-          <CartFooter cart={cart}/>
+          <Grid item>
+            <ProductsExhibitor products={cart} onRemoveProduct={removeFromCart} />
+          </Grid>
+          <Grid item>
+            <CartFooter cart={cart} handleBuyCart={handleBuyCart}/>
+          </Grid>
         </Grid>
       </Box>
     </LautyShopLayout>

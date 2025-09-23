@@ -1,9 +1,8 @@
-// import { AlternateEmail, LocalPhone, LocationOn } from "@mui/icons-material";
-
 
 export const linkArray = [
   { linkText: 'Tienda', linkUrl: '/'},
-  { linkText: 'Crear Producto', linkUrl: '/crear-producto'}
+  { linkText: 'Crear Producto', linkUrl: '/crear-producto'},
+  { linkText: 'Mi carrito', linkUrl: '/mi-carrito'}
 ]
 
 export const paymentMethods = [
@@ -22,31 +21,6 @@ export const paymentMethods = [
     name: 'american-express',
     url: 'src/ClothesShop/components/Footer/assets/american-express.png',
   },
-  // {
-  //   id: 4,
-  //   name: 'naranja',
-  //   url: 'src/ClothesShop/components/Footer/assets/naranja.png',
-  // },
-  // {
-  //   id: 5,
-  //   name: 'cabal',
-  //   url: 'src/ClothesShop/components/Footer/assets/cabal.png',
-  // },
-  // {
-  //   id: 6,
-  //   name: 'maestro',
-  //   url: 'src/ClothesShop/components/Footer/assets/maestro.png',
-  // },
-  // {
-  //   id: 7,
-  //   name: 'nativa',
-  //   url: 'src/ClothesShop/components/Footer/assets/nativa.png',
-  // },
-  // {
-  //   id: 8,
-  //   name: 'diners-club',
-  //   url: 'src/ClothesShop/components/Footer/assets/diners-club.png',
-  // },
 ];
 
 export const shippingMethods = [

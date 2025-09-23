@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import LautyShopApp from './LautyShopApp.tsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.ts'
+import 'animate.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

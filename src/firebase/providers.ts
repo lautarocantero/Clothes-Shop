@@ -1,30 +1,6 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, type User } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, type User } from "firebase/auth";
 import { FirebaseAuth } from "./firebase";
-import firebase from "firebase/compat/app";
 
-const googleProvider = new GoogleAuthProvider(); 
-
-export const singInWithGoogle = async() => {
-    try {
-        const result = await signInWithPopup(FirebaseAuth, googleProvider);
-        // const credentials = GoogleAuthProvider.credentialFromResult(result);
-
-        const user = result?.user;
-        const {displayName, email, photoURL, uid} = user;
-
-        return {
-            ok: true,
-            displayName, email, photoURL, uid
-        }
-
-    } catch (error: any) {
-        console.log(error);
-    return {
-        ok: false,
-        errorMessage: error?.message || 'Unknown error',
-    }
-}
-}
 
 interface loginWithUserEmail {
     email: string,
@@ -35,7 +11,7 @@ interface registerWithUserEmail extends loginWithUserEmail  {
     displayName: string,
 }
 
-export const registerUserWithEmailPassword = async({email, password, displayName}: registerWithUserEmail ) => {
+export const RegisterUserWithEmailPassword = async({email, password, displayName}: registerWithUserEmail ) => {
     try {
         const resp = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
         const { uid, photoURL} = resp?.user;

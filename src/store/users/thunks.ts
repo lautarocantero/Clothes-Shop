@@ -1,31 +1,49 @@
 import type { Dispatch } from "@reduxjs/toolkit";
-import { addToCart, setCart, setUser} from "./usersSlice";
+import { addToCart, setCart, setLoadCart, setUser } from "./usersSlice";
 import type { productType } from "../../LautyShop/pages/LautyShopPage/types/productTypes";
-import { loadUsers } from "./loadUsers";
 import { FirebaseDb } from "../../firebase/firebase";
 import type { RootState } from "../auth";
-import { doc, setDoc } from "firebase/firestore/lite";
+import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 
+export const startLoadingCart = (filters: { id?: string } = {}) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      if (!filters.id) return;
 
-export const startLoadingUsers = (id: string) => {
-    return async (dispatch: Dispatch) => {
-        const usersProfileList = await loadUsers();
-        const userProfile = usersProfileList?.filter((u) => u?.id === id )
-        dispatch(setUser(userProfile[0]))
+      dispatch(setLoadCart(true));
+
+      const userDocRef = doc(FirebaseDb, 'users', filters?.id);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        console.log('No se encontró el usuario');
+        return;
+      }
+
+      const user = {
+        id: userSnap.id,
+        ...userSnap.data(),
+      };
+      dispatch(setUser(user));
+    } catch (error) {
+      console.error('Error loading cart:', error);
     }
-}
-
+  };
+};
 
 export const startAddToCart = (product: productType) => {
-  return async (dispatch: Dispatch, getState: () =>  RootState) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     try {
+      dispatch(addToCart(product));
+
       const { id: userId } = getState().auth;
       const { cart } = getState().user;
-      const docRef = doc( FirebaseDb,'users',`${userId}`);
-      await setDoc(docRef, { id: userId, cart}, {merge:true});
-      dispatch(addToCart(product));
+
+      const docRef = doc(FirebaseDb, 'users', `${userId}`);
+      await setDoc(docRef, { id: userId, cart }, { merge: true });
+
     } catch (error) {
-      console.error(error);
+      console.error("Error al agregar al carrito:", error);
     }
   };
 };
@@ -39,6 +57,21 @@ export const startRemoveFromCart = (productsFiltered: productType[]) => {
       dispatch(setCart(productsFiltered));
     } catch (error) {
       console.log(error)
+    }
+  }
+}
+
+export const startBuyCart = () => {
+  return async( dispatch: Dispatch, getState: () => RootState) => {
+    try{
+      const { id: userId, name } = getState().user;
+      const docRef = doc(FirebaseDb, 'users', `${userId}`)
+      await setDoc(docRef, { id: userId, cart: [], name}, {merge:true});
+      dispatch(setCart([]));
+      return true;
+    } catch (error){
+      console.log(error)
+      return false;
     }
   }
 }

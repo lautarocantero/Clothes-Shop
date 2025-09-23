@@ -1,6 +1,3 @@
-// import { MenuOutlined } from "@mui/icons-material";
-// import PersonIcon from '@mui/icons-material/Person';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   AppBar,
   GridLegacy as Grid,
@@ -29,7 +26,7 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const handleNavigate = useNavigate();
 
-  const { name, status } = useSelector((state: RootState) => state?.auth);
+  const { status } = useSelector((state: RootState) => state?.auth);
 
   const dispatch = useDispatch();
 
@@ -95,85 +92,98 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
     );
   };
 
-  const DesktopMenu = () => {
+  const FloatingMenuLinks = () => {
+    if (status === 'authenticated') {
+      return (
+        <>
+          <MenuItem onClick={onHandleShoppingCart}>Mi carrito</MenuItem>
+          <MenuItem onClick={onLogout}>Cerrar sesión</MenuItem>
+        </>
+      );
+    }
+
     return (
       <>
-        <Grid
-          item
-          xs={12}
-          sm="auto"
-          container
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            flexGrow: 1,
-            flexDirection: { xs: 'column', sm: 'row' },
-            display: { xs: 'none', sm: 'flex' },
-          }}
-        >
-          <DesktopMenuLinks links={links} />
-        </Grid>
-        <Grid item sx={{ display: { xs: 'none', sm: 'flex' } }}>
-          <IconButton
-            sx={{
-              color: theme => theme?.custom?.white,
-              fontSize: theme => theme?.typography?.h4?.fontSize,
-            }}
-            onClick={ () => {handleNavigate('/carrito') }}
-          >
-            {/* <ShoppingCartIcon /> */}
-          </IconButton>
-          <IconButton
-            onMouseEnter={handleMouseEnter}
-            sx={{
-              color: theme => theme?.custom?.white,
-              fontSize: theme => theme?.typography?.h4?.fontSize,
-            }}
-          >
-            {/* <PersonIcon /> */}
-            <Typography>Cuenta</Typography>
-          </IconButton>
-
-          <Menu
-            open={open}
-            onClose={handleMouseLeave}
-            MenuListProps={{
-              onMouseLeave: handleMouseLeave,
-            }}
-            sx={{ marginTop: '2.5em'}}
-            slotProps={{
-          paper: {
-            sx: {
-              backgroundColor: theme => theme.palette.primary.main,
-              color: theme => theme.custom.white,
-              borderRadius: 0,
-              boxShadow: 'none',
-            },
-          },
-        }}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          
-          >
-            <MenuItem>Hola {name || 'Usuario'}!</MenuItem>
-            {
-              status === 'authenticated' ? (
-                <>
-                  <MenuItem onClick={onHandleShoppingCart}>Mi carrito</MenuItem>
-                  <MenuItem onClick={onLogout}>Cerrar sesión</MenuItem>
-                </>
-              ) : (
-                <>
-                  <MenuItem onClick={onRegister} >Registro</MenuItem>
-                  <MenuItem onClick={() => handleNavigate('/auth/login')}>Abrir sesión</MenuItem>
-                </>
-              )
-            }
-          </Menu>
-        </Grid>
+        <MenuItem onClick={onRegister}>Registro</MenuItem>
+        <MenuItem onClick={() => handleNavigate('/auth/login')}>Iniciar sesión</MenuItem>
       </>
     );
   };
+
+  const FloatingMenu = () => {
+    return (
+      <Menu
+        open={open}
+        onClose={handleMouseLeave}
+        MenuListProps={{
+          onMouseLeave: handleMouseLeave,
+        }}
+        sx={{ marginTop: '2.5em'}}
+        slotProps={{
+        paper: {
+          sx: {
+            backgroundColor: theme => theme.palette.primary.main,
+            color: theme => theme.custom.white,
+            borderRadius: 0,
+            boxShadow: 'none',
+          },
+        },
+        }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+          <FloatingMenuLinks />
+        </Menu>
+    )
+  }
+
+const DesktopMenu = () => {
+  return (
+    <>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{
+          flexGrow: 1,
+          display: { xs: 'none', sm: 'flex' },
+        }}
+      >
+        <Grid item xs={4} />
+        <Grid
+          item
+          xs={4}
+          container
+          justifyContent="center"
+          alignItems="center"
+        >
+          <DesktopMenuLinks links={links} />
+        </Grid>
+
+        <Grid
+          item
+          xs={4}
+          container
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <IconButton
+            onMouseEnter={handleMouseEnter}
+            sx={{
+              colour: theme => theme?.custom?.white,
+              fontSize: theme => theme?.typography?.h4?.fontSize,
+            }}
+          >
+            <Typography sx={{color: theme => theme?.custom?.white}}>
+              <span className="material-symbols-outlined">account_circle</span>
+            </Typography>
+          </IconButton>
+        </Grid>
+      </Grid>
+      <FloatingMenu />
+    </>
+  );
+};
 
   const MobileMenu = () => {
     return (
@@ -214,12 +224,6 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
             </MenuItem>
           );
         })}
-        <MenuItem sx={{ fontSize: theme => theme?.typography?.h5?.fontSize }}>
-          Hola {name || 'Usuario'}!
-        </MenuItem>
-        <MenuItem sx={{ fontSize: theme => theme?.typography?.h5?.fontSize }}>
-          Perfil
-        </MenuItem>
         <MenuItem onClick={onLogout}>Cerrar sesión</MenuItem>
       </Menu>
     );
@@ -231,11 +235,9 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
         <Toolbar>
           <Grid
             container
-            alignItems="center"
-            justifyContent="space-between"
             sx={{
               flexDirection: { xs: 'column', sm: 'row' },
-              alignContent: { xs: 'end', sm: 'center' },
+              alignContent: { xs: 'start', sm: 'none' },
             }}
           >
             <Grid item>
@@ -244,7 +246,7 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
                 sx={{ display: { xs: 'block', sm: 'none' }, color: theme => theme?.custom?.white }}
                 onClick={() => setMobileMenuOpen(true)}
               >
-                {/* <MenuOutlined /> */}
+                <span className="material-symbols-outlined">menu</span>
               </IconButton>
             </Grid>
             <DesktopMenu />
