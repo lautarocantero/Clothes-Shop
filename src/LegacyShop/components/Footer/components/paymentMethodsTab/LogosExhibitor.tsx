@@ -11,6 +11,7 @@ const LogosExhibitor = ({logos}: {logos: logosArrayType[]}) => {
               src={`${url}`} 
               alt={name} 
               style={{ width: 50 }} 
+              loading="lazy"
             />
         </Grid>
     ))}

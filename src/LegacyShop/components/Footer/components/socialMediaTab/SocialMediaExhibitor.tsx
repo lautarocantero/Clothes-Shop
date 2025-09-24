@@ -29,6 +29,7 @@ const SocialMediaExhibitor = ({socialMedia}: {socialMedia: socialMediaLink}) => 
           src={srcPath}
           alt={altText}
           style={{ width: 24, height: 24 }}
+          loading="lazy"
           />
     </Button>
   )

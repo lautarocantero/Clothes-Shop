@@ -33,6 +33,7 @@ const ProductCard = ({ id, title, price, type, size, imagesUrl }: productType) =
           src={imagesUrl}
           alt={`${id}_photo`}
           style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 4 }}
+          loading="lazy"
         />
       </Box>
 

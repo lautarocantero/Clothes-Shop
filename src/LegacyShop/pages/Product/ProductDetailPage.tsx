@@ -15,12 +15,14 @@ const ProductDetailPage = () => {
     };
   const { clothes } = useSelector((state: RootState) => state.shop);
   const { cart } = useSelector((state: RootState) => state.user);
+  const { status } = useSelector((state: RootState) => state?.auth);
   const clothesData = clothes?.find((c) => c.id === id );
   const {imagesUrl,price,size,title} = clothesData ?? {};
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
     if(!clothesData) return;
+    if(status !== 'authenticated') return;
     if(!cart?.find(c => c?.id === clothesData?.id)) {
         dispatch(startAddToCart(clothesData) as any);
         alert('se agrego al carrito!!');
@@ -69,6 +71,7 @@ const ProductDetailPage = () => {
                     <img
                     src={imagesUrl}
                     alt="photo"
+                    loading="lazy"
                     />
                 </Grid>
 
