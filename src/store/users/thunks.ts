@@ -1,9 +1,30 @@
 import type { Dispatch } from "@reduxjs/toolkit";
-import { addToCart, setCart, setLoadCart, setUser } from "./usersSlice";
+import { addToCart, setCart, setLoadCart, setRol, setUser } from "./usersSlice";
 import type { productType } from "../../LautyShop/pages/LautyShopPage/types/productTypes";
 import { FirebaseDb } from "../../firebase/firebase";
 import type { RootState } from "../auth";
 import { doc, getDoc, setDoc } from "firebase/firestore/lite";
+
+export const getUserRol = (id: string) => {
+  return async(dispatch: Dispatch) => {
+    try{
+      if(!id) return;
+      const userDocRef = doc(FirebaseDb, 'users', id);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        console.log('El documento del usuario no existe');
+        return;
+      }
+      
+      const {rol} = userSnap.data();
+      dispatch(setRol(rol));
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+}
 
 export const startLoadingCart = (filters: { id?: string } = {}) => {
   return async (dispatch: Dispatch) => {

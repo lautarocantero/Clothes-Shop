@@ -4,6 +4,7 @@ export interface RegisterProps {
   email: string,
   password: string,
   displayName: string,
+  rol: string,
 }
 
 export type RegisterFormType = {
@@ -11,6 +12,7 @@ export type RegisterFormType = {
     email: string, 
     password: string, 
     repeatPassword: string, 
+    rol: string,
     setFieldValue: (
       field: string,
       value: string | number | boolean,

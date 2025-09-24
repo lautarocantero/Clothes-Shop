@@ -1,4 +1,4 @@
-import { contactMethods, linkArray, paymentMethods, shippingMethods, socialMediaLinks } from "../../layout/layoutData"
+import { contactMethods, linkArrayUser, paymentMethods, shippingMethods, socialMediaLinks } from "../../layout/layoutData"
 import FooterComponent from "./FooterComponent"
 
 const AppFooter = () => {
@@ -6,7 +6,7 @@ const AppFooter = () => {
     <FooterComponent 
         color={'secondary'} 
         contactMethods={contactMethods}
-        links={linkArray} 
+        links={linkArrayUser} 
         paymentMethods={paymentMethods} 
         shippingMethods={shippingMethods} 
         socialMediaLinks={socialMediaLinks}

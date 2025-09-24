@@ -1,7 +1,12 @@
 
-export const linkArray = [
+export const linkArrayAdmin = [
   { linkText: 'Tienda', linkUrl: '/'},
-  { linkText: 'Crear Producto', linkUrl: '/crear-producto'},
+  { linkText: 'Mi carrito', linkUrl: '/mi-carrito'},
+  { linkText: 'Admin', linkUrl: '/admin'}
+]
+
+export const linkArrayUser = [
+  { linkText: 'Tienda', linkUrl: '/'},
   { linkText: 'Mi carrito', linkUrl: '/mi-carrito'}
 ]
 

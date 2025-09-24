@@ -39,7 +39,6 @@ export const startLoadingClothes = (
           return title.includes(searchLower);
         });
       dispatch(setClothes(clothes));
-      dispatch(setLoadingClothes(false));
     } catch (error) {
       console.error('Error loading clothes:', error);
     }

@@ -1,11 +1,11 @@
-import { Box, Button, GridLegacy as Grid, TextField } from "@mui/material"
+import { Autocomplete, Box, Button, GridLegacy as Grid, TextField } from "@mui/material"
 import { startCleanAuthMessage, startCreateUserWithEmailAndPassword, type RootState } from "../../../store/auth";
 import { useDispatch, useSelector } from "react-redux"
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom"
 import * as Yup from 'yup';
 import AuthLayout from "../../layout/AuthLayout"
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
 import ErrorExpositure from "../helpers/ErrorExpositure";
 
@@ -14,6 +14,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
     password: '',
     repeatPassword: '',
     displayName: '',
+    rol: '',
   })
 
   const getValidationSchema = () =>
@@ -28,14 +29,21 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
         repeatPassword: Yup.string()
           .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
           .required('Repite la contraseña'),
+        rol: Yup.string().required('Campo obligatorio'),
       }),
   );
+
+  const roles = [
+    { value: 'administrator', label: 'administrador'},
+    { value: 'user', label: 'usuario'},
+  ]
 
   const FormFields = ({
     displayName,
     email, 
     password, 
     repeatPassword, 
+    rol,
     errorMessage, 
     onGoBack,
     setFieldValue,
@@ -100,6 +108,25 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
               helperText={(errors?.repeatPassword)?.toString()}
             />
           </Grid>
+          <Grid item xs={12} sm={12} mt={2}>
+              <Autocomplete
+                fullWidth
+                options={roles}
+                getOptionLabel={(option) => option.label}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Rol"
+                    error={!!errors.rol}
+                    helperText={errors.rol?.toString()}
+                  />
+                )}
+                value={roles.find((role) => role.value === rol) || null}
+                onChange={(_, selectedOption) => {
+                  setFieldValue('rol', selectedOption?.value || '');
+                }}
+              />
+          </Grid>
           <ErrorExpositure errorMessage={errorMessage} />
           <Grid container display={'flex'} gap={{xs: 2, md: 0}}
             sx={{
@@ -142,8 +169,8 @@ const RegisterPage = () => {
     setErrorMessage(errorFromStore ?? '');
   }, [errorFromStore]);
 
-  const onRegister = ({displayName, email, password}: RegisterProps) => {
-      dispatch(startCreateUserWithEmailAndPassword({ email, password, displayName }) as any);
+  const onRegister = ({displayName, email, password, rol}: RegisterProps) => {
+      dispatch(startCreateUserWithEmailAndPassword({ email, password, displayName, rol }) as any);
   }
 
   const onGoBack = () => {
@@ -156,17 +183,20 @@ const RegisterPage = () => {
   const { handleSubmit, values, setFieldValue, errors} = 
     useFormik({
       initialValues: getInitialValues(),
-      onSubmit: (data: { displayName: string; email: string; password: string, repeatPassword: string }) => {
+      onSubmit: (data: { displayName: string; email: string; password: string, repeatPassword: string, rol: string }) => {
         onRegister({
           displayName: data?.displayName,
           email: data.email.trim(),
           password: data.password,
+          rol: data.rol,
         });
       },
       validateOnBlur: false,
       validateOnChange: false,
       validationSchema: getValidationSchema(),
     })
+
+    console.log(values?.rol)
 
   return (
     <AuthLayout title={'Registro'}>
@@ -181,6 +211,7 @@ const RegisterPage = () => {
           email={values.email}
           password={values.password}
           repeatPassword={values.repeatPassword}
+          rol={values?.rol}
           setFieldValue={setFieldValue}
           errors={errors}
           errorMessage={errorMessage}

@@ -2,18 +2,22 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { productType } from "../../LautyShop/pages/LautyShopPage/types/productTypes"
 import type { store } from "../store"
 
+export type RolType = 'administrator' | 'user' | null;
+
 export interface usersSliceState {
     cart:  productType[],
-    id: string,
+    id: string | null,
     name: string,
+    rol: RolType,
     cartTotalAmount: number,
     isLoadingCart: boolean,
 }
 
 const initialState: usersSliceState = {
     cart: [],
-    id: '',
+    id: null,
     name: '',
+    rol: null,
     cartTotalAmount: 0,
     isLoadingCart: false,
 }
@@ -22,9 +26,13 @@ export const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        setRol: (state, action) => {
+            state.rol = action?.payload;
+        },
         setUser: (state, action) => {
             state.id = action?.payload?.id;
             state.name = action?.payload?.name;
+            state.rol = action?.payload?.rol;
             state.cart = action?.payload?.cart;
             state.isLoadingCart = action?.payload?.isLoadingCart
         },
@@ -40,13 +48,19 @@ export const usersSlice = createSlice({
             state.cart = [...state.cart,  action?.payload];
         },
         buyCart: (state) => {
-            // se vacia y te manda a la pagina de tarjeta de compra
             state.cart = [];
+        },
+        logoutUser: (state) => {
+            state.id = null;
+            state.name = '';
+            state.rol = null;
+            state.cart = [];
+            state.isLoadingCart = false
         }
     }
 })
 
-export const {setUser, setLoadCart,setCart,addToCart, buyCart} = usersSlice.actions;
+export const {setUser, setRol,  setLoadCart,setCart,addToCart, buyCart, logoutUser} = usersSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>
 

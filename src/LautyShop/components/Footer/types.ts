@@ -8,7 +8,7 @@ export type logosArrayType = {
 }
 
 export type contactMethodsType = {
-    icon: React.ReactNode,
+    icon?: React.ReactNode | null,
     text: string,
 }
 
