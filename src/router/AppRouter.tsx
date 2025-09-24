@@ -1,16 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import LautyRoutes from "../LautyShop/routes/LautyRoutes";
 import AuthRoutes from "../auth/routes/AuthRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, type RootState } from "../store/auth";
-import { type RootState as UserRootState } from "../store/users";
+import { type RootState as UserRootState } from "../store/user";
 import { onAuthStateChanged } from "firebase/auth";
 import { FirebaseAuth } from "../firebase/firebase";
 import { useEffect } from "react";
 import { CheckingAuth } from "../ui";
-import ProductDetailPage from "../LautyShop/pages/Product/ProductDetailPage";
-import LautyShopPage from "../LautyShop/pages/LautyShopPage/LautyShopPage";
 import AdminRoutes from "../admin/routes/AdminRoutes";
+import LautyShopPage from "../LegacyShop/pages/LautyShopPage/LautyShopPage";
+import ProductDetailPage from "../LegacyShop/pages/Product/ProductDetailPage";
+import LegacyRoutes from "../LegacyShop/routes/LegacyRoutes";
 
 const AppRouther = () => {
   const {status} = useSelector((state: RootState) => state?.auth);
@@ -49,7 +49,7 @@ const AppRouther = () => {
       }
 
       {status === 'authenticated' ? (
-        <Route path="/*" element={<LautyRoutes />} />
+        <Route path="/*" element={<LegacyRoutes />} />
       ) : (
         <Route path="/auth/*" element={<AuthRoutes />} />
       )}

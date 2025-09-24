@@ -1,15 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, type User } from "firebase/auth";
 import { FirebaseAuth } from "./firebase";
-
-
-interface loginWithUserEmail {
-    email: string,
-    password: string,
-}
-
-interface registerWithUserEmail extends loginWithUserEmail  {
-    displayName: string,
-}
+import type { loginWithUserEmail, registerWithUserEmail } from "./types";
 
 export const RegisterUserWithEmailPassword = async({email, password, displayName}: registerWithUserEmail ) => {
     try {
@@ -33,8 +24,8 @@ export const RegisterUserWithEmailPassword = async({email, password, displayName
 
 export const LoginWithEmailPassword = async({email, password} : loginWithUserEmail ) => {
     try {
-        const resp = signInWithEmailAndPassword(FirebaseAuth, email, password);
-        const {displayName, photoURL, uid} =  (await resp).user;
+        const { user } = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+        const { displayName, photoURL, uid } = user;
 
         return {
             ok: true,

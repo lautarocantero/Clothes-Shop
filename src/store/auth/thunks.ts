@@ -3,7 +3,7 @@ import { LoginWithEmailPassword, logoutFirebase, RegisterUserWithEmailPassword }
 import { checkingCredentials, clearAuthError, login, logout } from "./authSlice";
 import { FirebaseDb } from "../../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore/lite";
-import { logoutUser, setUser } from "../users";
+import { logoutUser } from "../user";
 
 interface startSignInEmail {
     email: string;

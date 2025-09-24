@@ -41,7 +41,7 @@ export const authSlice = createSlice({
             state.id = null;
             state.errorMessage = action?.payload?.errorMessage;
         },
-        checkingCredentials: (state: authState, /*action*/ ) => {
+        checkingCredentials: (state: authState ) => {
             state.status = 'checking';
         },
         clearAuthError: (state: authState) => {

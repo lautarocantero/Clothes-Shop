@@ -1,13 +1,14 @@
 import { Autocomplete, Box, Button, GridLegacy as Grid, TextField } from "@mui/material"
+import { roles } from "../../types/AuthTypes";
 import { startCleanAuthMessage, startCreateUserWithEmailAndPassword, type RootState } from "../../../store/auth";
 import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react";
 import { useFormik } from 'formik';
 import { useNavigate } from "react-router-dom"
 import * as Yup from 'yup';
 import AuthLayout from "../../layout/AuthLayout"
-import { useEffect, useState } from "react";
-import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
 import ErrorExpositure from "../helpers/ErrorExpositure";
+import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
 
   const getInitialValues = () => ({
     email: '',
@@ -33,10 +34,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
       }),
   );
 
-  const roles = [
-    { value: 'administrator', label: 'administrador'},
-    { value: 'user', label: 'usuario'},
-  ]
+
 
   const FormFields = ({
     displayName,
@@ -196,8 +194,6 @@ const RegisterPage = () => {
       validationSchema: getValidationSchema(),
     })
 
-    console.log(values?.rol)
-
   return (
     <AuthLayout title={'Registro'}>
       <Box 
@@ -207,11 +203,7 @@ const RegisterPage = () => {
         p={2} 
       >
         <FormFields 
-          displayName={values.displayName}
-          email={values.email}
-          password={values.password}
-          repeatPassword={values.repeatPassword}
-          rol={values?.rol}
+          {...values}
           setFieldValue={setFieldValue}
           errors={errors}
           errorMessage={errorMessage}

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { productType } from '../../LautyShop/pages/LautyShopPage/types/productTypes';
 import type { store } from '../store';
+import type { productType } from '../../LegacyShop/pages/LautyShopPage/types/productTypes';
 
 export interface shopSliceState {
     clothes: productType[],
