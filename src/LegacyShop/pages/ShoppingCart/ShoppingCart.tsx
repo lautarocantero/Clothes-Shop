@@ -29,7 +29,7 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
 
   return (
     <Grid item xs={12}>
-      {products.map(({ id, imagesUrl, title, price, stock, size }) => (
+      {products.map(({ id, imagesUrl, title, price, size }) => (
         <Grid
           key={id}
           container

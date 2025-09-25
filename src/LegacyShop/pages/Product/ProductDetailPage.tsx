@@ -1,5 +1,5 @@
 import { Box, Button, GridLegacy as Grid, TextField, Typography, Link } from "@mui/material"
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import LegacyShopLayout from "../../layout/LegacyShopLayout";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,10 +19,15 @@ const ProductDetailPage = () => {
   const clothesData = clothes?.find((c) => c.id === id );
   const {imagesUrl,price,size,title} = clothesData ?? {};
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     if(!clothesData) return;
-    if(status !== 'authenticated') return;
+    console.log('status:', status);
+    if(status === 'not-authenticated') {
+        navigate('/auth/register');
+        return;
+    }
     if(!cart?.find(c => c?.id === clothesData?.id)) {
         dispatch(startAddToCart(clothesData) as any);
         alert('se agrego al carrito!!');
@@ -57,7 +62,7 @@ const ProductDetailPage = () => {
                     item
                     sx={{
                         gridArea: 'imagen',
-                        maxHeight: {xs: '300px', md: 'none'},
+                        maxHeight: {xs: '300px', md: '500px'},
                         height: {xs: '300px', md: 'auto'},
                         display: 'flex',
                         justifyContent: 'center',
@@ -69,9 +74,9 @@ const ProductDetailPage = () => {
                     className="animate__animated animate__fadeIn"
                 >
                     <img
-                    src={imagesUrl}
-                    alt="photo"
-                    loading="lazy"
+                        src={imagesUrl}
+                        alt="photo"
+                        loading="lazy"
                     />
                 </Grid>
 
@@ -184,7 +189,7 @@ const ProductDetailPage = () => {
                             <Grid container display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
                                 <Grid item xs={1}>
                                   <img
-                                    src={'/public/assets/Icons/security.png'}
+                                    src={'/assets/Icons/security.png'}
                                     alt="photo"
                                     style={{width: '100%', margin: '0 auto' }}
                                   />
@@ -199,7 +204,7 @@ const ProductDetailPage = () => {
                             <Grid container display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
                                 <Grid item xs={1}>
                                   <img
-                                    src={'/public/assets/Icons/refound.png'}
+                                    src={'/assets/Icons/refound.png'}
                                     alt="photo"
                                     style={{width: '100%', margin: '0 auto' }}
                                   />

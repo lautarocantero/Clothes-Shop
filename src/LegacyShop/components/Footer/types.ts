@@ -1,8 +1,7 @@
 import type React from "react";
-import type { AppBarColor, NavBarLink } from "../NavBar/types";
+import type { NavBarLink } from "../NavBar/types";
 
 export interface FooterInterface {
-  color?: AppBarColor,
   contactMethods?: contactMethodsType[],
   links: NavBarLink[],
   paymentMethods?: logosArrayType[],

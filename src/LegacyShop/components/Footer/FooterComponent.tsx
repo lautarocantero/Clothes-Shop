@@ -6,7 +6,6 @@ import PaymentMethodsTab from './components/paymentMethodsTab/PaymentMethodsTab'
 import SocialMediaTab from './components/socialMediaTab/SocialMediaTab';
 
 const FooterComponent = ( {
-  color = 'primary', 
   contactMethods = [],
   links = [], 
   paymentMethods = [],  

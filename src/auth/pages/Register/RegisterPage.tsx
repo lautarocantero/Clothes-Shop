@@ -126,12 +126,13 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               />
           </Grid>
           <ErrorExpositure errorMessage={errorMessage} />
-          <Grid container display={'flex'} gap={{xs: 2, md: 0}}
+          <Grid container gap={{xs: 2, sm: 0}}
             sx={{
               mt: 2,
               display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
+              flexDirection: { xs: 'column', sm: 'row' },
               justifyContent: 'space-between'}}
+              flexWrap={'wrap'}
           >
               <Grid item xs={12} sm={4}>
                 <Button
@@ -199,7 +200,7 @@ const RegisterPage = () => {
       <Box 
         component={"form"}
         onSubmit={handleSubmit} 
-        sx={{ backgroundColor: theme => theme?.custom?.white, width: {xs: '100%',md:'30%'}, margin: '0 auto' }} 
+        sx={{ backgroundColor: theme => theme?.custom?.white, width: {xs: '100%',sm:'60%', md: '40%'}, margin: '0 auto' }} 
         p={2} 
       >
         <FormFields 

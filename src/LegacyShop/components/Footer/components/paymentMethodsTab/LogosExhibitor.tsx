@@ -8,7 +8,7 @@ const LogosExhibitor = ({logos}: {logos: logosArrayType[]}) => {
     {logos?.map(({name, id, url}) => (
         <Grid item key={id}>
             <img 
-              src={`${url}`} 
+              src={url} 
               alt={name} 
               style={{ width: 50 }} 
               loading="lazy"

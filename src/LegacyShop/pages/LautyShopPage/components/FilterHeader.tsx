@@ -16,11 +16,12 @@ const RemoveFilter = () => {
       component={LinkReactRouter}
       to="/"
       sx={{
-        colour: (theme) => theme.palette.primary.main,
+        color: (theme) => theme.palette.primary.main,
         backgroundColor: (theme) => theme.custom.white,
         textTransform: "none",
         cursor: "pointer",
         "&:hover": {
+          color: (theme) => theme.palette.primary.main,
           textDecoration: "underline",
           fontSize: "1.1em",
         },

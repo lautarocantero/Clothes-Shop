@@ -275,6 +275,9 @@ const PaymentMethodPage = () => {
                                 <TextField
                                 label="Fecha de expiración"
                                 type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 // placeholder="MM/AA"
                                 fullWidth
                                 name="creditCardExpirationDate"

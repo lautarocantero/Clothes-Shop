@@ -13,6 +13,7 @@ import ProductCard from "./ProductCard";
 import queryString from "query-string";
 import type { productType } from "../types/productTypes";
 
+
 const ProductsExhibitor = React.memo(
   ({ products }: { products: productType[] }) => {
     return (
@@ -35,13 +36,13 @@ const ProductsExhibitor = React.memo(
   }
 );
 
-  const LoaderClothes = ({
-    isLoadingClothes,
-    clothes,
-  }: {
-    isLoadingClothes: boolean;
-    clothes: productType[];
-  }) => {
+const LoaderClothes = ({
+  isLoadingClothes,
+  clothes,
+}: {
+  isLoadingClothes: boolean;
+  clothes: productType[];
+}) => {
   if (isLoadingClothes) {
     return (
       <Box
@@ -68,12 +69,16 @@ const ProductsList = () => {
 
   const dispatch = useDispatch();
   const { clothes, isLoadingClothes } = useSelector((state: RootState) => state.shop);
-  const [searchParams, setSearchParams] = useState<string>("");
-
+  
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    dispatch(startLoadingClothes({ type, size, searchParams }) as any);
-  }, [dispatch, type, size, searchParams]);
+    const timeout = setTimeout(() => {
+      dispatch(startLoadingClothes({ type, size, searchParams: searchTerm }) as any);
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [dispatch, type, size, searchTerm]);
 
   return (
     <Box
@@ -110,7 +115,7 @@ const ProductsList = () => {
               <TextField
                 fullWidth
                 name="Buscador"
-                onChange={(e) => setSearchParams(e?.target?.value)}
+                onChange={(e) => setSearchTerm(e?.target?.value)}
                 placeholder="Remera..."
                 type="text"
                 label="Buscador"
@@ -118,7 +123,7 @@ const ProductsList = () => {
             </Box>
           </Box>
         </Grid>
-        <LoaderClothes isLoadingClothes={isLoadingClothes} clothes={clothes}/>
+        <LoaderClothes isLoadingClothes={isLoadingClothes} clothes={clothes} />
       </Grid>
     </Box>
   );

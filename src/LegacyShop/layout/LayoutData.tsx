@@ -14,17 +14,17 @@ export const paymentMethods = [
   {
     id: 1,
     name: 'visa',
-    url: 'public/assets/CreditCards/003-visa.png',
+    url: '/assets/CreditCards/003-visa.png',
   },
   {
     id: 2,
     name: 'mastercard',
-    url: 'public/assets/CreditCards/004-master-card.png',
+    url: '/assets/CreditCards/004-master-card.png',
   },
   {
     id: 3,
     name: 'american-express',
-    url: 'public/assets/CreditCards/001-american-express.png',
+    url: '/assets/CreditCards/001-american-express.png',
   },
 ];
 
@@ -32,17 +32,17 @@ export const shippingMethods = [
   {
     id: 1,
     name: 'correo-argentino',
-    url: 'public/assets/ShippingLogos/correo-argentino.png',
+    url: '/assets/ShippingLogos/correo-argentino.png',
   },
   {
     id: 2,
     name: 'oca',
-    url: 'public/assets/ShippingLogos/oca.webp',
+    url: '/assets/ShippingLogos/oca.png',
   },
   {
     id: 3,
     name: 'andreani',
-    url: 'public/assets/ShippingLogos/andreani.jpg',
+    url: '/assets/ShippingLogos/andreani.jpg',
   }
 ]
 
@@ -64,12 +64,12 @@ export const contactMethods = [
 
 export const socialMediaLinks = [
   {
-    srcPath: 'public/assets/SocialMediaLogos/icons8-instagram.svg',
+    srcPath: '/assets/SocialMediaLogos/icons8-instagram.svg',
     altText: 'Instagram',
     link: 'https://www.instagram.com/',
   },
   {
-    srcPath: 'public/assets/SocialMediaLogos/icons8-tik-tok.svg',
+    srcPath: '/assets/SocialMediaLogos/icons8-tik-tok.svg',
     altText: 'TikTok',
     link: 'https://www.tiktok.com/explore',
   }
