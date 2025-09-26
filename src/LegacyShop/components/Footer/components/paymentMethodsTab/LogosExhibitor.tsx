@@ -1,12 +1,12 @@
-import { GridLegacy as Grid } from "@mui/material"
+import { Grid } from "@mui/material"
 import type { logosArrayType } from "../../types"
 
 
 const LogosExhibitor = ({logos}: {logos: logosArrayType[]}) => {
   return (
-    <Grid container spacing={1} sx={{ width: { xs: '100%' } }}>
+    <Grid container spacing={1} sx={{ width: { xs: '100%' }, justifyContent: {xs:'center', sm: '-moz-initial'} }}>
     {logos?.map(({name, id, url}) => (
-        <Grid item key={id}>
+        <Grid key={id}>
             <img 
               src={url} 
               alt={name} 
@@ -20,3 +20,5 @@ const LogosExhibitor = ({logos}: {logos: logosArrayType[]}) => {
 }
 
 export default LogosExhibitor
+
+

@@ -62,5 +62,7 @@ export const usersSlice = createSlice({
 export const {setUser, setRol,  setLoadCart,setCart,addToCart, buyCart, logoutUser} = usersSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;
 
 export default usersSlice;
+

@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { calculateTotalAmount } from "../../../helpers/calculateTotalAmount";
 import type { productType } from "../LautyShopPage/types/productTypes";
 import { useNavigate } from "react-router-dom";
+import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
 
   const getInitialValues = () => ({
     contact: '',
@@ -66,8 +67,19 @@ import { useNavigate } from "react-router-dom";
 
     const ThanksForBuying = () => {
         return (
-            <Box sx={{ margin: "110px auto 50px", width: { xs: "95%", md: "40%" }, backgroundColor: theme => theme?.palette?.primary?.main, borderRadius: '20px' }}>
-                <Typography sx={{ color: theme => theme?.custom?.white, padding: 2, fontSize: theme => theme?.typography?.h1?.fontSize}}>Gracias por tu compra!</Typography>
+            <Box
+                className="animate__animated animate__fadeInDown"
+                sx={{
+                    margin: "110px auto 50px",
+                    width: { xs: "95%", md: "40%" },
+                    backgroundColor: theme => theme?.palette?.primary?.main,
+                    borderRadius: '20px',
+                    color: theme => theme?.custom?.white,
+                    padding: 2,
+                    fontSize: theme => theme?.typography?.h1?.fontSize,
+                }}
+                >
+                ¡Gracias por tu compra!
             </Box>
         )
     }
@@ -340,7 +352,7 @@ const PaymentMethodPage = () => {
                 </Box>
             ) : <ThanksForBuying/>
         }
-      
+      <MercadoPagoWallet />
     </LegacyShopLayout>
   );
 };

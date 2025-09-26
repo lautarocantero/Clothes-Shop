@@ -11,10 +11,10 @@ import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
         if (!errorMessage) return null;
 
         return (
-        <Grid item xs={12} sm={12} mt={2}>
+        <Grid xs={12} sm={12} mt={2}>
             <Typography
             sx={{
-                color: (theme) => theme?.palette?.primary?.main,
+                color: theme => theme?.palette?.error?.main
             }}
             component="h5"
             >
@@ -25,3 +25,5 @@ import { getFirebaseErrorMessage } from "../../helpers/getFireBaseErrorMessage";
     });
 
   export default ErrorExpositure
+
+

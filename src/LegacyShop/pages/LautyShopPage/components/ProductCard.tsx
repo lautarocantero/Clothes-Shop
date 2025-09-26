@@ -22,7 +22,11 @@ const ProductCard = ({ id, title, price, type, size, imagesUrl }: productType) =
         height: 'auto',
         minWidth: { xs: "45%", md: '40%' },
         width: { xs: "90%", md: '100%' },
-        overflow: 'hidden'
+        overflow: 'hidden',
+        '&:hover': {
+          // padding: 2,
+          border: theme => `1px dotted ${theme?.palette?.primary?.main}`
+        },
       }}
       className="animate__animated animate__fadeIn"
       onClick={handleNavigate}

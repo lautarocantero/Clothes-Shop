@@ -99,6 +99,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
                 fullWidth
                 variant='contained'
                 type="submit"
+                sx={{ color: theme => theme?.palette?.secondary?.main }}
                 >
                   Login
                 </Button>
@@ -106,7 +107,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
 
               <Grid container direction={'row'} justifyContent={'end'} sx={{ mt: 2}}>
                 <Link component={LinkRouter} to={'/auth/register'} onClick={() => dispatch(startCleanAuthMessage() as any)}>
-                  <Typography sx={{ color: theme => theme?.custom?.accent }}>Crear cuenta</Typography>
+                  <Typography sx={{ color: theme => theme?.palette?.primary?.main }}>Crear cuenta</Typography>
                 </Link>
               </Grid>
             </Grid>

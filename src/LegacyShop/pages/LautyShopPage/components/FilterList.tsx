@@ -40,25 +40,21 @@ const FilterList = ({ items, filterTitle }: { items: any[], filterTitle: string 
               component={LinkReactRouter}
               to={getUpdatedSearch(item)}
               sx={{
-                color: selected
-                  ? theme => theme?.palette?.primary?.main
-                  : theme => theme?.custom?.white,
-                backgroundColor: selected
-                  ? theme => theme?.custom?.white
-                  : theme => theme?.palette?.primary?.main,
+                color: theme => theme?.custom?.white,
                 fontWeight: selected ? 'bold' : 'normal',
                 textDecoration: 'none',
                 cursor: 'pointer',
                 '&:hover': {
-                  color: selected
-                  ? theme => theme?.palette?.primary?.main
-                  : theme => theme?.custom?.white,
                   textDecoration: 'underline',
                   fontSize: '1.5em',
                 },
               }}
             >
-              {capitalize(item)}
+              <span>
+                {selected && <span className="material-symbols-outlined" style={{ color: 'white', fontSize: '12px'}}>arrow_forward</span>}
+                {capitalize(item)} 
+                {selected && <span className="material-symbols-outlined" style={{ color: 'white', fontSize: '12px'}}>arrow_back</span>}
+              </span>
             </Link>
           </li>
         );
@@ -98,3 +94,5 @@ const FilterList = ({ items, filterTitle }: { items: any[], filterTitle: string 
 };
 
 export default FilterList;
+
+

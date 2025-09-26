@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material';
-import { red } from '@mui/material/colors';
 
 //gracias a esto puedo agregar colores custom.
 declare module '@mui/material/styles' {
@@ -24,17 +23,17 @@ declare module '@mui/material/styles' {
 export const mainTheme = createTheme({
     palette: {
         primary: {
-            main: '#3A4A42'
+            main: '#FF6B00'
         },
         secondary: {
-            main: '#586f64ff'
+            main: '#F5F5F5'
         },
         error: {
-            main: red.A400
+            main: '#e83766'
         }
     },
     custom: {
-        white: '#fff',
+        white: '#eff0f8',
         gray: 'E8E5E3',
         lightGray: '#727272ff',
         accent: '#333333',
@@ -75,3 +74,5 @@ export const mainTheme = createTheme({
     },
   },
 })
+
+

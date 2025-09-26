@@ -1,45 +1,95 @@
-import { Box, Button, GridLegacy as Grid, TextField, Typography, Link } from "@mui/material"
+import { Box, Button, GridLegacy as Grid, TextField, Typography, Link, Snackbar, IconButton, type SnackbarCloseReason, Slide } from "@mui/material"
 import { Link as LinkRouter, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import LegacyShopLayout from "../../layout/LegacyShopLayout";
 import { useDispatch, useSelector } from "react-redux";
 import queryString from  "query-string";
 import { startLoadingClothes, type RootState } from "../../../store/shop";
 import { startAddToCart } from "../../../store/user/thunks";
+import type { AppDispatch } from "../../../store/user";
 
 
 const ProductDetailPage = () => {
-
-  const { id } = queryString.parse(location.search) as {
-      id?: string;
-    };
-  const { clothes } = useSelector((state: RootState) => state.shop);
-  const { cart } = useSelector((state: RootState) => state.user);
-  const { status } = useSelector((state: RootState) => state?.auth);
-  const clothesData = clothes?.find((c) => c.id === id );
-  const {imagesUrl,price,size,title} = clothesData ?? {};
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const [open, setOpen] = useState<boolean>(false);
+    const { id } = queryString.parse(location.search) as {
+        id?: string;
+        };
+    const { clothes, cart, status } = useSelector((state: RootState) => ({
+        clothes: state.shop.clothes,
+        cart: state.user.cart,
+        status: state.auth.status,
+    }));
+    const clothesData = useMemo(() => {
+        return clothes?.find((c) => c.id === id);
+    }, [clothes, id]);  
+    const {imagesUrl,price,size,title} = clothesData ?? {};
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
   const handleAddToCart = () => {
     if(!clothesData) return;
-    console.log('status:', status);
     if(status === 'not-authenticated') {
         navigate('/auth/register');
         return;
     }
     if(!cart?.find(c => c?.id === clothesData?.id)) {
         dispatch(startAddToCart(clothesData) as any);
-        alert('se agrego al carrito!!');
+        setOpen(true);
     }
   }
 
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  
+
   useEffect(() => {
-      dispatch(startLoadingClothes() as any);
-  }, [dispatch]);
+    if (!clothes || clothes.length === 0) {
+        dispatch(startLoadingClothes() as any);
+    }
+    }, [clothes, dispatch]);
+
+  const action = (
+    <>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        Cerrar
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+      </IconButton>
+    </>
+  );
 
   return (
     <LegacyShopLayout>
+        <Snackbar
+            open={open}
+            autoHideDuration={1000}
+            message={
+                <span>
+                <span
+                    className="material-symbols-outlined"
+                    style={{ verticalAlign: 'middle', marginRight: '4px' }}
+                >
+                    shopping_cart
+                </span>
+                Agregado al carrito
+                </span>
+            }
+            action={action}
+            TransitionComponent={(props) => <Slide {...props} direction="up" />}
+            />
         <Box 
             sx={{
                 borderRadius: '5px', 
@@ -80,7 +130,7 @@ const ProductDetailPage = () => {
                     />
                 </Grid>
 
-                <Grid item sx={{ gridArea: 'info' }}>
+                <Grid sx={{ gridArea: 'info' }}>
                     <Grid container>
                         <Grid xs={12}>
                             <Typography
@@ -100,7 +150,7 @@ const ProductDetailPage = () => {
                               price && (
                               <Typography
                                   sx={{
-                                      color: theme => theme?.palette?.secondary?.main,
+                                      color: theme => theme?.palette?.primary?.main,
                                       justifySelf: 'end'
                                   }}>
                                       Precio sin impuestos ${`${price - (price * 12 / 100)}`}
@@ -128,7 +178,7 @@ const ProductDetailPage = () => {
                                             fullWidth
                                             name="postalCode"
                                             value={'1755'}
-                                            onChange={()=> {}}
+                                            // onChange={()=> {}}
                                             sx={{ backgroundColor: theme => theme?.custom?.white}}
                                         />
                                     </Grid>
@@ -187,14 +237,15 @@ const ProductDetailPage = () => {
                         <hr style={{ width: '100%'}}/>
                         <Grid container display={'flex'} flexDirection={'column'} gap={'15px'}> 
                             <Grid container display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                                <Grid item xs={1}>
+                                <Grid xs={1}>
                                   <img
                                     src={'/assets/Icons/security.png'}
                                     alt="photo"
                                     style={{width: '100%', margin: '0 auto' }}
+                                    loading="lazy"
                                   />
                                 </Grid>
-                                <Grid item xs={11}>
+                                <Grid xs={11}>
                                     <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>
                                         Compra protegida
                                     </Typography>
@@ -202,14 +253,15 @@ const ProductDetailPage = () => {
                                 </Grid>
                             </Grid>
                             <Grid container display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-                                <Grid item xs={1}>
+                                <Grid xs={1}>
                                   <img
                                     src={'/assets/Icons/refound.png'}
                                     alt="photo"
                                     style={{width: '100%', margin: '0 auto' }}
+                                    loading="lazy"
                                   />
                                 </Grid>
-                                <Grid item xs={11}>
+                                <Grid xs={11}>
                                     <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>
                                         Cambios y devoluciones
                                     </Typography>
@@ -229,3 +281,4 @@ const ProductDetailPage = () => {
 
 export default ProductDetailPage
                 
+

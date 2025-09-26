@@ -49,7 +49,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
     ActionTitle}: RegisterFormType) => {
     return (
       <Grid container direction={'column'}>
-          <Grid item xs={12} sm={12}>
+          <Grid xs={12} sm={12}>
             <TextField
               fullWidth
               name='displayName'
@@ -64,7 +64,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               helperText={(errors?.displayName)?.toString()}
             />
           </Grid>
-          <Grid item xs={12} sm={12} mt={2}>
+          <Grid xs={12} sm={12} mt={2}>
             <TextField
               fullWidth
               name='email'
@@ -79,7 +79,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               helperText={(errors?.email)?.toString()}
             />
           </Grid>
-          <Grid item xs={12} sm={12} mt={2}>
+          <Grid xs={12} sm={12} mt={2}>
             <TextField
               fullWidth
               name='password'
@@ -93,7 +93,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               helperText={(errors?.password)?.toString()}
             />
           </Grid>
-          <Grid item xs={12} sm={12} mt={2}>
+          <Grid xs={12} sm={12} mt={2}>
             <TextField
               fullWidth
               name='repeatPassword'
@@ -106,7 +106,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               helperText={(errors?.repeatPassword)?.toString()}
             />
           </Grid>
-          <Grid item xs={12} sm={12} mt={2}>
+          <Grid xs={12} sm={12} mt={2}>
               <Autocomplete
                 fullWidth
                 options={roles}
@@ -134,20 +134,22 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               justifyContent: 'space-between'}}
               flexWrap={'wrap'}
           >
-              <Grid item xs={12} sm={4}>
+              <Grid xs={12} sm={4}>
                 <Button
                 fullWidth
                 variant='contained'
                 onClick={onGoBack}
+                sx={{color: theme => theme?.palette?.secondary?.main}}
                 >
                   Volver
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid xs={12} sm={4}>
                 <Button
                   fullWidth
                   variant='contained'
                   type="submit"
+                  sx={{color: theme => theme?.palette?.secondary?.main}}
                 >
                   {ActionTitle}
                 </Button>
@@ -217,3 +219,5 @@ const RegisterPage = () => {
 }
 
 export default RegisterPage
+
+

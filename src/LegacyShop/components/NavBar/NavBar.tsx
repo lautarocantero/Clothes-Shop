@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as LinkReactRouter, useNavigate } from "react-router-dom";
-import { startLogout, type RootState } from "../../../store/auth";
+import { startLogout, type RootState as AuthRootState } from "../../../store/auth";
+import { type RootState as UserRootState } from "../../../store/user";
 import type { AppBarColor, NavBarLink } from "./types";
 
 interface NavBarProps {
@@ -26,7 +27,7 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const handleNavigate = useNavigate();
 
-  const { status } = useSelector((state: RootState) => state?.auth);
+  const { status, name } = useSelector((state: AuthRootState) => state?.auth);
 
   const dispatch = useDispatch();
 
@@ -71,15 +72,15 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
               <Link
                 component={LinkReactRouter}
                 to={linkTo}
-                color="inherit"
                 sx={{
                   fontSize: theme => theme?.typography?.body1?.fontSize,
                   textDecoration: 'none',
                   width: '100%',
                   fontWeight: 200,
+                  color: theme => theme.palette?.secondary?.main,
                   '&:hover': {
-                    color: theme => theme.custom.white,
                     textDecoration: 'underline',
+                    color: theme => theme.palette?.secondary?.main,
                   },
                 }}
               >
@@ -149,7 +150,7 @@ const DesktopMenu = () => {
           display: { xs: 'none', sm: 'flex' },
         }}
       >
-        <Grid item xs={4} />
+        <Grid xs={4} />
         <Grid
           item
           xs={4}
@@ -167,6 +168,7 @@ const DesktopMenu = () => {
           justifyContent="flex-end"
           alignItems="center"
         >
+          <Typography sx={{ color: theme => theme?.palette?.secondary?.main, maxWidth: '200px',overflow: 'hidden',whiteSpace: 'nowrap',textOverflow: 'ellipsis'}}>{name || ''}</Typography>
           <IconButton
             onMouseEnter={handleMouseEnter}
             sx={{
@@ -244,7 +246,7 @@ const DesktopMenu = () => {
               alignContent: { xs: 'start', sm: 'none' },
             }}
           >
-            <Grid item>
+            <Grid>
               <IconButton
                 aria-label="Abrir menú de usuario"
                 sx={{ display: { xs: 'block', sm: 'none' }, color: theme => theme?.custom?.white }}

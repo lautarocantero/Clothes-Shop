@@ -29,5 +29,8 @@ export const shopSlice = createSlice({
 export const {setLoadingClothes, setClothes} = shopSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;
 
 export default  shopSlice;
+
+
