@@ -3,14 +3,16 @@ import LegacyShopLayout from "../../layout/LegacyShopLayout";
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { identificationTypes, paymentMethods, shippingMethods } from "./helpers/PaymentMethodData";
-import { savePurchase, startLoadingCart } from "../../../store/user";
+import { startLoadingCart } from "../../../store/user";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState as AuthRootState } from '../../../store/auth';
 import { type RootState as UserRootState } from '../../../store/user';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { calculateTotalAmount } from "../../../helpers/calculateTotalAmount";
 import { useSearchParams } from "react-router-dom";
 import MercadoPagoWallet, { type purchaseType } from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
+import ThanksForBuying from "./ThanksForBuying/ThanksForBuying";
+import type { purchaseStateOptions } from "./PaymentMethodTypes";
 
   const getInitialValues = () => ({
     contact: '',
@@ -63,67 +65,6 @@ import MercadoPagoWallet, { type purchaseType } from "./mercado-pago-checkouts/M
     }),
   );
 
-  type purchaseStateOptions = 'approved' | 'fail' | 'pending' | null;
-
-    const ThanksForBuying = ({paymentState, dispatch, userId}: {paymentState: purchaseStateOptions, dispatch: any, userId: string }) => {
-        // http://localhost:5173/completar-compra?payment_state=approved&collection_id=127400578301&collection_status=approved&payment_id=127400578301&status=approved&external_reference=null&payment_type=credit_card&merchant_order_id=34338413311&preference_id=2714436498-856ce458-041c-4a5d-94d1-29f0bfa41d67&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
-        const isValidState = (value: any): value is Exclude<purchaseStateOptions, null> =>
-            ['approved', 'fail', 'pending'].includes(value);
-        const alreadySaved = useRef(false);
-
-        useEffect(() => {
-        if (paymentState === 'approved' && !alreadySaved.current) {
-            alreadySaved.current = true;
-            dispatch(savePurchase({ userId }) as any);
-        }
-        }, [paymentState, userId, dispatch]);
-
-        if (!isValidState(paymentState)) return null;
-
-
-        return (
-            <Box
-                className="animate__animated animate__fadeInDown"
-                sx={{
-                    margin: "110px auto 50px",
-                    width: { xs: "95%", md: "40%" },
-                    backgroundColor: theme => theme?.palette?.primary?.main,
-                    borderRadius: '20px',
-                    color: theme => theme?.custom?.white,
-                    padding: 2,
-                    fontSize: theme => theme?.typography?.h1?.fontSize,
-                }}
-                >
-                    {
-                        paymentState === 'approved' && (
-                            <span>
-                                ¡Gracias por tu compra!
-                            </span>
-                        )
-                    }
-                    {
-                        paymentState === 'fail' && (
-                            <span>
-                                ¡Algo salio mal, intentalo más tarde!
-                            </span>
-                        )
-                    }
-                    {
-                        paymentState === 'pending' && (
-                            <span>
-                                Procesando pago...
-                            </span>
-                        )
-                    }
-            </Box>
-        )
-    }
-
-    // type PaymentMethodFooterProps = {
-    //     cart: productType[];
-    //     startPurchase: boolean;
-    //     values: any;
-    // };
 
     const PaymentMethodFooter = ({ data, startPurchase }: any) => {
         const purchaseDataObject = {
@@ -158,7 +99,7 @@ import MercadoPagoWallet, { type purchaseType } from "./mercado-pago-checkouts/M
                     type="submit"
                     sx={{ width: {xs:'50%', md: '20%'} }}
                 >
-                    Continuar
+                    Finalizar compra
                 </Button>
                  )
             }
@@ -184,7 +125,6 @@ const PaymentMethodPage = () => {
      },[])
 
     useEffect(() => {
-        // el error esta aca
           if (!id) return; 
           if(paymentState !== 'approved')
             dispatch(startLoadingCart({id} as any) as any);
