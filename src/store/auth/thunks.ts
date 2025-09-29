@@ -3,7 +3,7 @@ import { LoginWithEmailPassword, logoutFirebase, RegisterUserWithEmailPassword }
 import { checkingCredentials, clearAuthError, login, logout } from "./authSlice";
 import { FirebaseDb } from "../../firebase/firebase";
 import { doc, setDoc } from "firebase/firestore/lite";
-import { logoutUser } from "../user";
+import { logoutUser, setRol } from "../user";
 
 interface startSignInEmail {
     email: string;
@@ -37,6 +37,7 @@ export const startCreateUserWithEmailAndPassword = ({email, password, displayNam
         const docRef = doc(FirebaseDb, 'users', `${uid}`)
         await setDoc(docRef, { id: uid, cart: [], name:displayName, rol}, {merge:true});
         dispatch(login({uid, displayName, email, photoURL}));
+        dispatch(setRol(rol))
     }
 
 }

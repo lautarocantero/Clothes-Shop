@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { type RootState as AuthRootState } from '../../../store/auth';
 import { type RootState as UserRootState } from '../../../store/user';
 import { useEffect, useState } from "react";
-import { calculateTotalAmount } from "../../../helpers/calculateTotalAmount";
 import { useSearchParams } from "react-router-dom";
-import MercadoPagoWallet, { type purchaseType } from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
+import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
 import ThanksForBuying from "./ThanksForBuying/ThanksForBuying";
 import type { purchaseStateOptions } from "./PaymentMethodTypes";
+import axios from "axios";
 
   const getInitialValues = () => ({
     contact: '',
@@ -66,46 +66,34 @@ import type { purchaseStateOptions } from "./PaymentMethodTypes";
   );
 
 
-    const PaymentMethodFooter = ({ data, startPurchase }: any) => {
-        const purchaseDataObject = {
-            idUsuario: data?.id,
-            email: data?.contact,
-            postalCode: data?.postalCode,
-            shippingMethod: data?.shippingMethod,
-            identificationType: data?.identificationType,
-            identificationNumber: data?.identificationNumber,
-            cart: data?.cart,
-            totalAmount: calculateTotalAmount(data?.cart),
-        }
-
-    if (data?.cart?.length === 0) {
-        return (
-        <Grid item xs={12} padding={2}>
-            <Typography color="red" textAlign="center">
-            Agrega productos al carrito para poder comprar
-            </Typography>
-        </Grid>
-        );
-    }
-
+ const PaymentMethodFooter = ({ data, startPurchase, preferenceId }: any) => {
+  if (data?.cart?.length === 0) {
     return (
-        <Grid item xs={12} display="flex" justifyContent="flex-end">
-            { 
-                startPurchase ? (
-                    <MercadoPagoWallet data={purchaseDataObject as purchaseType}/>
-                ) : ( 
-                <Button
-                    variant="contained"
-                    type="submit"
-                    sx={{ width: {xs:'50%', md: '20%'} }}
-                >
-                    Finalizar compra
-                </Button>
-                 )
-            }
-        </Grid>
+      <Grid item xs={12} padding={2}>
+        <Typography color="red" textAlign="center">
+          Agrega productos al carrito para poder comprar
+        </Typography>
+      </Grid>
     );
-    };
+  }
+
+  return (
+    <Grid item xs={12} display="flex" justifyContent="flex-end">
+      {startPurchase ? (
+        <MercadoPagoWallet preferenceId={preferenceId} />
+      ) : (
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ width: { xs: "50%", md: "20%" } }}
+        >
+          Finalizar compra
+        </Button>
+      )}
+    </Grid>
+  );
+};
+
 
 const PaymentMethodPage = () => {
     const dispatch = useDispatch();
@@ -115,10 +103,21 @@ const PaymentMethodPage = () => {
     const [searchParams] = useSearchParams();
     const paymentState = searchParams.get('payment_state');
     const [startPurchase, setStartPurchase] = useState<boolean>(false);
+    const [preferenceId, setPreferenceId] = useState<string | null>(null);
 
-     const handlePreparePurchase = () => {
+    const handlePreparePurchase = async () => {
+    try {
+        const response = await axios.post(
+        "https://c5pjn0t4ne.execute-api.us-east-2.amazonaws.com/dev/mercadopago/create-preference-id",
+        { cart },
+        { headers: { "Content-Type": "application/json" } }
+        );
+        setPreferenceId(response.data?.id || null);
         setStartPurchase(true);
-     }
+    } catch (error) {
+        console.error("Error creando preferenceId:", error);
+    }
+    };
 
      useEffect(() => {
         if(paymentState) setHasBougth(true);
@@ -340,7 +339,7 @@ const PaymentMethodPage = () => {
                                 helperText={errors?.identificationNumber?.toString()}
                                 />
                             </Grid>
-                            <PaymentMethodFooter data={{...values,cart,startPurchase, id}} startPurchase={startPurchase}/>
+                            <PaymentMethodFooter data={{...values,cart,startPurchase, id}} startPurchase={startPurchase} preferenceId={preferenceId}/>
                             
 
                     </Grid>
