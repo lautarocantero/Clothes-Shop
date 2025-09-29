@@ -5,10 +5,11 @@ export const shippingMethods = [
 ]
 
 export const paymentMethods = [
+    { value: 'mercadopago', label: 'mercado pago'},
     { value: 'visa', label: 'visa'},
     { value: 'mastercard', label: 'mastercard'},
     { value: 'americanexpress', label: 'american express'},
-    { value: 'efectivo', label: 'efectivo'},
+    // { value: 'efectivo', label: 'efectivo'},
 ]
 
 export const identificationTypes = [

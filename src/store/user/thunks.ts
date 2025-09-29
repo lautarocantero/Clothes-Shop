@@ -1,11 +1,10 @@
 import type { Dispatch } from "@reduxjs/toolkit";
-import { addToCart, setCart, setLoadCart, setRol, setUser } from "./usersSlice";
+import { addToCart, setCart, setLoadCart, setRol, setUser, type User } from "./usersSlice";
 import { FirebaseDb } from "../../firebase/firebase";
 import type { RootState } from "../auth";
 import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 import type { productType } from "../../LegacyShop/pages/LautyShopPage/types/productTypes";
 import {v4 as uuidv4} from 'uuid';
-import type { CompletePurchaseProps } from "../../LegacyShop/pages/PaymentMethod/helpers/types";
 
 export const getUserRol = (id: string) => {
   return async(dispatch: Dispatch) => {
@@ -35,6 +34,8 @@ export const startLoadingCart = (filters: { id?: string } = {}) => {
 
       dispatch(setLoadCart(true));
 
+      //toma de la base de datos el cart y lo actualiza de nuevo en el slice
+      //fijarme de que se guarde bien que el cart se vacia en la base de datos
       const userDocRef = doc(FirebaseDb, 'users', filters?.id);
       const userSnap = await getDoc(userDocRef);
 
@@ -84,22 +85,35 @@ export const startRemoveFromCart = (productsFiltered: productType[]) => {
   }
 }
 
-export const startBuyCart = (purchaseObject: CompletePurchaseProps) => {
-  return async( dispatch: Dispatch, getState: () => RootState) => {
+export const savePurchase = ({userId}: {userId: string} ) => {
+  return async( dispatch: Dispatch) => {
     try{
-      const { id: userId } = getState().user;
       const purchaseId = uuidv4();
-      
-      const docRef = doc(FirebaseDb, 'purchases', `${purchaseId}`)
-      await setDoc(docRef, { 
-        ...purchaseObject,
-      }, {merge:true});
 
-      const {name} = purchaseObject;
-      const userRef = doc(FirebaseDb, 'users', `${userId}`);
-      await setDoc(userRef, { id: userId, name, cart: [] }, { merge: true });
-      dispatch(setCart([]));
-      return true;
+      //obtener datos del usuario
+      const userDocRef = doc(FirebaseDb, 'users', userId);
+      const userSnap = await getDoc(userDocRef);
+      
+      if (!userSnap.exists()) {
+        console.log('No se encontró el usuario');
+        return;
+      }
+
+      const user = {
+        id: userSnap.id,
+        ...(userSnap.data() as Omit<User, "id">),
+      };
+
+      if (!user.cart || user.cart.length === 0) return;
+        const docRef = doc(FirebaseDb, 'purchases', `${purchaseId}`)
+        await setDoc(docRef, { 
+          ...user.cart,
+         userId,
+        }, {merge:true});
+        const userRef = doc(FirebaseDb, 'users', `${userId}`);
+        await setDoc(userRef, { id: userId, name: user.name, cart: [] }, { merge: true });
+        dispatch(setCart([]));
+        return true;
     } catch (error){
       console.log(error)
       return false;

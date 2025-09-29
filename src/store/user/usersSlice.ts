@@ -3,6 +3,12 @@ import type { store } from "../store"
 import type { productType } from "../../LegacyShop/pages/LautyShopPage/types/productTypes";
 import type { RolType } from "../../auth/types/AuthTypes";
 
+export type User = {
+  id: string;
+  name: string;
+  cart: any[];
+};
+
 export interface usersSliceState {
     cart:  productType[],
     id: string | null,

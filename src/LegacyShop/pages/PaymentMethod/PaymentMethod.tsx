@@ -3,16 +3,14 @@ import LegacyShopLayout from "../../layout/LegacyShopLayout";
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { identificationTypes, paymentMethods, shippingMethods } from "./helpers/PaymentMethodData";
-import type { PurchaseProps } from "./helpers/types";
-import { startBuyCart, startLoadingCart } from "../../../store/user";
+import { savePurchase, startLoadingCart } from "../../../store/user";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState as AuthRootState } from '../../../store/auth';
 import { type RootState as UserRootState } from '../../../store/user';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { calculateTotalAmount } from "../../../helpers/calculateTotalAmount";
-import type { productType } from "../LautyShopPage/types/productTypes";
-import { useNavigate } from "react-router-dom";
-import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
+import { useSearchParams } from "react-router-dom";
+import MercadoPagoWallet, { type purchaseType } from "./mercado-pago-checkouts/MercadoPagoWallet/MercadoPagoWallet";
 
   const getInitialValues = () => ({
     contact: '',
@@ -38,25 +36,25 @@ import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/Mercad
         paymentMethod: Yup.string().required('Campo obligatorio').trim(),
         creditCardNumber: Yup.number()
         .when('paymentMethod', {
-            is: (value: string) => value !== 'efectivo',
+            is: (value: string) => value !== 'mercadopago',
             then: (schema) => schema.required('Número de tarjeta requerido'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardOwner: Yup.string()
         .when('paymentMethod', {
-            is: (value: string) => value !== 'efectivo',
+            is: (value: string) => value !== 'mercadopago',
             then: (schema) => schema.required('Nombre del titular requerido'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardExpirationDate: Yup.string()
         .when('paymentMethod', {
-            is: (value: string) => value !== 'efectivo',
+            is: (value: string) => value !== 'mercadopago',
             then: (schema) => schema.required('Fecha de expiración requerida'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardCvv: Yup.string()
         .when('paymentMethod', {
-            is: (value: string) => value !== 'efectivo',
+            is: (value: string) => value !== 'mercadopago',
             then: (schema) => schema.required('CVV requerido'),
             otherwise: (schema) => schema.notRequired(),
         }),
@@ -65,7 +63,24 @@ import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/Mercad
     }),
   );
 
-    const ThanksForBuying = () => {
+  type purchaseStateOptions = 'approved' | 'fail' | 'pending' | null;
+
+    const ThanksForBuying = ({paymentState, dispatch, userId}: {paymentState: purchaseStateOptions, dispatch: any, userId: string }) => {
+        // http://localhost:5173/completar-compra?payment_state=approved&collection_id=127400578301&collection_status=approved&payment_id=127400578301&status=approved&external_reference=null&payment_type=credit_card&merchant_order_id=34338413311&preference_id=2714436498-856ce458-041c-4a5d-94d1-29f0bfa41d67&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
+        const isValidState = (value: any): value is Exclude<purchaseStateOptions, null> =>
+            ['approved', 'fail', 'pending'].includes(value);
+        const alreadySaved = useRef(false);
+
+        useEffect(() => {
+        if (paymentState === 'approved' && !alreadySaved.current) {
+            alreadySaved.current = true;
+            dispatch(savePurchase({ userId }) as any);
+        }
+        }, [paymentState, userId, dispatch]);
+
+        if (!isValidState(paymentState)) return null;
+
+
         return (
             <Box
                 className="animate__animated animate__fadeInDown"
@@ -79,17 +94,50 @@ import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/Mercad
                     fontSize: theme => theme?.typography?.h1?.fontSize,
                 }}
                 >
-                ¡Gracias por tu compra!
+                    {
+                        paymentState === 'approved' && (
+                            <span>
+                                ¡Gracias por tu compra!
+                            </span>
+                        )
+                    }
+                    {
+                        paymentState === 'fail' && (
+                            <span>
+                                ¡Algo salio mal, intentalo más tarde!
+                            </span>
+                        )
+                    }
+                    {
+                        paymentState === 'pending' && (
+                            <span>
+                                Procesando pago...
+                            </span>
+                        )
+                    }
             </Box>
         )
     }
 
-    type PaymentMethodFooterProps = {
-        cart: productType[];
-    };
+    // type PaymentMethodFooterProps = {
+    //     cart: productType[];
+    //     startPurchase: boolean;
+    //     values: any;
+    // };
 
-    const PaymentMethodFooter = ({ cart }: PaymentMethodFooterProps) => {
-    if (cart?.length === 0) {
+    const PaymentMethodFooter = ({ data, startPurchase }: any) => {
+        const purchaseDataObject = {
+            idUsuario: data?.id,
+            email: data?.contact,
+            postalCode: data?.postalCode,
+            shippingMethod: data?.shippingMethod,
+            identificationType: data?.identificationType,
+            identificationNumber: data?.identificationNumber,
+            cart: data?.cart,
+            totalAmount: calculateTotalAmount(data?.cart),
+        }
+
+    if (data?.cart?.length === 0) {
         return (
         <Grid item xs={12} padding={2}>
             <Typography color="red" textAlign="center">
@@ -101,13 +149,19 @@ import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/Mercad
 
     return (
         <Grid item xs={12} display="flex" justifyContent="flex-end">
-        <Button
-            variant="contained"
-            type="submit"
-            sx={{ width: {xs:'50%', md: '20%'} }}
-        >
-            Comprar
-        </Button>
+            { 
+                startPurchase ? (
+                    <MercadoPagoWallet data={purchaseDataObject as purchaseType}/>
+                ) : ( 
+                <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{ width: {xs:'50%', md: '20%'} }}
+                >
+                    Continuar
+                </Button>
+                 )
+            }
         </Grid>
     );
     };
@@ -115,33 +169,34 @@ import MercadoPagoWallet from "./mercado-pago-checkouts/MercadoPagoWallet/Mercad
 const PaymentMethodPage = () => {
     const dispatch = useDispatch();
     const { cart } = useSelector((state: UserRootState) => state.user);
-    const { id, name } = useSelector((state: AuthRootState) => state.auth);
+    const { id } = useSelector((state: AuthRootState) => state.auth);
     const [hasBought, setHasBougth] = useState<boolean>(false);
-    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const paymentState = searchParams.get('payment_state');
+    const [startPurchase, setStartPurchase] = useState<boolean>(false);
 
-     const handleCompletePurchase = async(data: PurchaseProps) => {
-         const purchaseObject = {...data, cart, totalAmount: calculateTotalAmount(cart), userId: id, purchaseDate: Date.now(), name}
-
-         const response = await dispatch(startBuyCart(purchaseObject) as any);
-         if(response){
-             setHasBougth(true);
-             await new Promise(resolve => setTimeout(resolve, 60000));
-             navigate('/');
-             return;
-         }
-         alert('Ocurrio un error en el proceso de compra');
+     const handlePreparePurchase = () => {
+        setStartPurchase(true);
      }
 
+     useEffect(() => {
+        if(paymentState) setHasBougth(true);
+     },[])
+
     useEffect(() => {
+        // el error esta aca
           if (!id) return; 
-          dispatch(startLoadingCart({id} as any) as any);
-        }, [dispatch, id]);
+          if(paymentState !== 'approved')
+            dispatch(startLoadingCart({id} as any) as any);
+    }, [id, paymentState, dispatch]);
+
+
 
     const { handleSubmit, values, setFieldValue, errors} = 
         useFormik({
             initialValues: getInitialValues(),
-            onSubmit: (data: PurchaseProps) => {
-                handleCompletePurchase(data);
+            onSubmit: () => {
+                handlePreparePurchase();
             },
             validateOnBlur: false,
             validateOnChange: false,
@@ -254,7 +309,7 @@ const PaymentMethodPage = () => {
                                 />
                             </Grid>
 
-                        {values.paymentMethod !== 'efectivo' && (
+                        {values.paymentMethod !== 'mercadopago' && (
                             <>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -345,14 +400,14 @@ const PaymentMethodPage = () => {
                                 helperText={errors?.identificationNumber?.toString()}
                                 />
                             </Grid>
-                            <PaymentMethodFooter cart={cart}/>
+                            <PaymentMethodFooter data={{...values,cart,startPurchase, id}} startPurchase={startPurchase}/>
                             
 
                     </Grid>
                 </Box>
-            ) : <ThanksForBuying/>
+            ) : <ThanksForBuying paymentState={paymentState as purchaseStateOptions} dispatch={dispatch} userId={id as string} />
         }
-      <MercadoPagoWallet />
+      
     </LegacyShopLayout>
   );
 };
