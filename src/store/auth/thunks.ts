@@ -2,12 +2,18 @@ import type { Dispatch } from "@reduxjs/toolkit"
 import { LoginWithEmailPassword, logoutFirebase, RegisterUserWithEmailPassword } from "../../firebase/providers"
 import { checkingCredentials, clearAuthError, login, logout } from "./authSlice";
 import { FirebaseDb } from "../../firebase/firebase";
-import { doc, setDoc } from "firebase/firestore/lite";
+import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 import { logoutUser, setRol } from "../user";
 
 interface startSignInEmail {
     email: string;
     password: string;
+}
+
+interface User {
+    name: string;
+    rol: string;
+    cart?: any[];
 }
 
 export const startLoginWithEmailPassword = ({email, password}: startSignInEmail ) => {
@@ -17,6 +23,20 @@ export const startLoginWithEmailPassword = ({email, password}: startSignInEmail 
 
         if(!ok) return dispatch(logout({errorMessage}));
         dispatch(login({displayName, email,photoURL,uid}));
+        
+        if(!uid) return;
+        const userDocRef = doc(FirebaseDb, 'users', uid);
+        const userSnap = await getDoc(userDocRef);
+        
+        if (!userSnap.exists()) {
+            return;
+        }
+
+        const user = {
+        id: userSnap.id,
+        ...(userSnap.data() as Omit<User, "id">),
+        };
+        dispatch(setRol(user?.rol))
     }
 }
 
