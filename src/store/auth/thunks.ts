@@ -19,24 +19,28 @@ interface User {
 export const startLoginWithEmailPassword = ({email, password}: startSignInEmail ) => {
     return async(dispatch: Dispatch) => {
         dispatch(checkingCredentials());
-        const {errorMessage, displayName, ok, photoURL, uid} = await LoginWithEmailPassword({email,password});
-
-        if(!ok) return dispatch(logout({errorMessage}));
-        dispatch(login({displayName, email,photoURL,uid}));
-        
-        if(!uid) return;
-        const userDocRef = doc(FirebaseDb, 'users', uid);
-        const userSnap = await getDoc(userDocRef);
-        
-        if (!userSnap.exists()) {
-            return;
+        try {
+            const {errorMessage, displayName, ok, photoURL, uid} = await LoginWithEmailPassword({email,password});
+    
+            if(!ok) return dispatch(logout({errorMessage}));
+            dispatch(login({displayName, email,photoURL,uid}));
+            
+            if(!uid) return;
+            const userDocRef = doc(FirebaseDb, 'users', uid);
+            const userSnap = await getDoc(userDocRef);
+            
+            if (!userSnap.exists()) {
+                return;
+            }
+    
+            const user = {
+            id: userSnap.id,
+            ...(userSnap.data() as Omit<User, "id">),
+            };
+            dispatch(setRol(user?.rol))
+        } catch(error: any) {
+            dispatch(logout({ errorMessage: error.message || "Error while login user" }));
         }
-
-        const user = {
-        id: userSnap.id,
-        ...(userSnap.data() as Omit<User, "id">),
-        };
-        dispatch(setRol(user?.rol))
     }
 }
 
@@ -46,18 +50,26 @@ interface createUserEmailPassword extends startSignInEmail {
     rol: string,
 }
 
-export const startCreateUserWithEmailAndPassword = ({email, password, displayName, rol}: createUserEmailPassword ) => {
+export const startCreateUserWithEmailAndPassword = ({email, password, displayName, rol}:        createUserEmailPassword ) => {
     return async(dispatch: Dispatch) => {
         dispatch(checkingCredentials());
 
-        const {ok, uid, photoURL, errorMessage} = await  RegisterUserWithEmailPassword({email, password, displayName});
-        if(!ok) {
-            return dispatch(logout({errorMessage: errorMessage?.message}))
-        };
-        const docRef = doc(FirebaseDb, 'users', `${uid}`)
-        await setDoc(docRef, { id: uid, cart: [], name:displayName, rol}, {merge:true});
-        dispatch(login({uid, displayName, email, photoURL}));
-        dispatch(setRol(rol))
+        //hash is no needed if i use register from firebase
+        try {
+            const { ok, uid, photoURL, errorMessage } = await RegisterUserWithEmailPassword({ email, password, displayName });
+
+            if (!ok) {
+                return dispatch(logout({ errorMessage: errorMessage?.message }));
+            }
+
+            const docRef = doc(FirebaseDb, "users", `${uid}`);
+            await setDoc(docRef, { id: uid, cart: [], name: displayName, rol }, { merge: true });
+
+            dispatch(login({ uid, displayName, email, photoURL }));
+            dispatch(setRol(rol));
+        } catch (error: any) {
+            dispatch(logout({ errorMessage: error.message || "Error while creating user" }));
+        }
     }
 
 }
