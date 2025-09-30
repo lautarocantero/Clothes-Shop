@@ -20,7 +20,7 @@ const ProductsExhibitor = React.memo(
       <Grid item xs={12}>
         {products?.length === 0 ? (
           <Typography variant="h6" sx={{ mt: 4 }}>
-            No hay productos disponibles.
+            No products available
           </Typography>
         ) : (
           <Grid container spacing={2} justifyContent="center">
@@ -116,9 +116,9 @@ const ProductsList = () => {
                 fullWidth
                 name="Buscador"
                 onChange={(e) => setSearchTerm(e?.target?.value)}
-                placeholder="Remera..."
+                placeholder="Pants..."
                 type="text"
-                label="Buscador"
+                label="Search Bar"
               />
             </Box>
           </Box>

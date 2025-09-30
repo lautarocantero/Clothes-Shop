@@ -13,7 +13,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as LinkReactRouter, useNavigate } from "react-router-dom";
 import { startLogout, type RootState as AuthRootState } from "../../../store/auth";
-import { type RootState as UserRootState } from "../../../store/user";
 import type { AppBarColor, NavBarLink } from "./types";
 
 interface NavBarProps {
@@ -97,16 +96,16 @@ const NavBar = ({ links = [], color = 'primary' }: NavBarProps) => {
     if (status === 'authenticated') {
       return (
         <>
-          <MenuItem onClick={onHandleShoppingCart}>Mi carrito</MenuItem>
-          <MenuItem onClick={onLogout}>Cerrar sesión</MenuItem>
+          <MenuItem onClick={onHandleShoppingCart}>My cart</MenuItem>
+          <MenuItem onClick={onLogout}>Sign out</MenuItem>
         </>
       );
     }
 
     return (
       <>
-        <MenuItem onClick={onRegister}>Registro</MenuItem>
-        <MenuItem onClick={() => handleNavigate('/auth/login')}>Iniciar sesión</MenuItem>
+        <MenuItem onClick={onRegister}>Sign up</MenuItem>
+        <MenuItem onClick={() => handleNavigate('/auth/login')}>Login</MenuItem>
       </>
     );
   };

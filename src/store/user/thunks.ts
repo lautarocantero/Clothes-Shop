@@ -14,7 +14,7 @@ export const getUserRol = (id: string) => {
       const userSnap = await getDoc(userDocRef);
 
       if (!userSnap.exists()) {
-        console.log('El documento del usuario no existe');
+        console.log('The user doc does not exist');
         return;
       }
       
@@ -34,13 +34,11 @@ export const startLoadingCart = (filters: { id?: string } = {}) => {
 
       dispatch(setLoadCart(true));
 
-      //toma de la base de datos el cart y lo actualiza de nuevo en el slice
-      //fijarme de que se guarde bien que el cart se vacia en la base de datos
       const userDocRef = doc(FirebaseDb, 'users', filters?.id);
       const userSnap = await getDoc(userDocRef);
 
       if (!userSnap.exists()) {
-        console.log('No se encontró el usuario');
+        console.log('User not found');
         return;
       }
 
@@ -67,7 +65,7 @@ export const startAddToCart = (product: productType) => {
       await setDoc(docRef, { id: userId, cart }, { merge: true });
 
     } catch (error) {
-      console.error("Error al agregar al carrito:", error);
+      console.error("Error while adding to cart:", error);
     }
   };
 };
@@ -95,7 +93,7 @@ export const savePurchase = ({userId}: {userId: string} ) => {
       const userSnap = await getDoc(userDocRef);
       
       if (!userSnap.exists()) {
-        console.log('No se encontró el usuario');
+        console.log('User not found');
         return;
       }
 

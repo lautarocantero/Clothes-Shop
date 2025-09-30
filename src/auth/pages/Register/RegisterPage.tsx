@@ -21,16 +21,16 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
   const getValidationSchema = () =>
     Yup.lazy(() =>
       Yup.object().shape({
-        displayName: Yup.string().required('Campo obligatorio'),
+        displayName: Yup.string().required('Required field'),
         email: Yup.string()
-          .email('Ingrese un email')
-          .required('Campo obligatorio')
+          .email('Type a email')
+          .required('Required field')
           .trim(),
-        password: Yup.string().required('Campo obligatorio'),
+        password: Yup.string().required('Required field'),
         repeatPassword: Yup.string()
-          .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
-          .required('Repite la contraseña'),
-        rol: Yup.string().required('Campo obligatorio'),
+          .oneOf([Yup.ref('password')], 'The passwords do not match')
+          .required('Repeat password'),
+        rol: Yup.string().required('Required field'),
       }),
   );
 
@@ -59,7 +59,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               placeholder='jhon Doe'
               type='text'
               value={displayName} 
-              label='Nombre'
+              label='Name'
               error={!!errors.displayName}
               helperText={(errors?.displayName)?.toString()}
             />
@@ -74,7 +74,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               placeholder='jhonDoe@gmail.com'
               type='email'
               value={email}
-              label='Email'
+              label="E-mail" 
               error={!!errors.email}
               helperText={(errors?.email)?.toString()}
             />
@@ -88,7 +88,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               }}
               type='password'
               value={password}
-              label='Contraseña'
+              label='Password'
               error={!!errors?.password}
               helperText={(errors?.password)?.toString()}
             />
@@ -102,7 +102,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
               }}
               type='password'
               value={repeatPassword}
-              label='Repite la Contraseña'error={!!errors?.repeatPassword}
+              label='Repeat password'error={!!errors?.repeatPassword}
               helperText={(errors?.repeatPassword)?.toString()}
             />
           </Grid>
@@ -141,7 +141,7 @@ import type { RegisterFormType, RegisterProps } from "./RegisterTypes";
                 onClick={onGoBack}
                 sx={{color: theme => theme?.palette?.secondary?.main}}
                 >
-                  Volver
+                  Back
                 </Button>
               </Grid>
               <Grid xs={12} sm={4}>
@@ -198,7 +198,7 @@ const RegisterPage = () => {
     })
 
   return (
-    <AuthLayout title={'Registro'}>
+    <AuthLayout title={'Sign up'}>
       <Box 
         component={"form"}
         onSubmit={handleSubmit} 
@@ -211,7 +211,7 @@ const RegisterPage = () => {
           errors={errors}
           errorMessage={errorMessage}
           onGoBack={onGoBack}
-          ActionTitle={'Registrarse'}
+          ActionTitle={'Sign up'}
         />
       </Box>
     </AuthLayout>

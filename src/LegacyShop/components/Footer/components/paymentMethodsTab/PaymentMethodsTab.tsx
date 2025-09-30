@@ -5,9 +5,9 @@ import type { logosArrayType } from "../../types"
 const PaymentMethodsTab = ({paymentMethods, shippingMethods}: {paymentMethods: logosArrayType[], shippingMethods: logosArrayType[]}) => {
   return (
     <Box>
-        <Typography sx={{ color: theme => theme?.custom?.white, fontWeight: 'bold',textAlign: 'center', width: '100%' }} variant='h6'>Medios de Pago</Typography>
+        <Typography sx={{ color: theme => theme?.custom?.white, fontWeight: 'bold',textAlign: 'center', width: '100%' }} variant='h6'>Payment Methods</Typography>
             <LogosExhibitor logos={paymentMethods}/>
-        <Typography sx={{ color: theme => theme?.custom?.white, fontWeight: 'bold', textAlign: 'center', width: '100%' }} variant='h6'>Formas de envío</Typography>
+        <Typography sx={{ color: theme => theme?.custom?.white, fontWeight: 'bold', textAlign: 'center', width: '100%' }} variant='h6'>Shipping Methods</Typography>
             <LogosExhibitor logos={shippingMethods}/>
     </Box>
   )

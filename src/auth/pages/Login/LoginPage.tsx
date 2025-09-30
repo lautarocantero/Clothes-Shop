@@ -18,10 +18,10 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
     Yup.lazy(() =>
       Yup.object().shape({
         email: Yup.string()
-          .email('Ingrese un email')
-          .required('Campo obligatorio')
+          .email('Type a email')
+          .required('Required field')
           .trim(),
-        password: Yup.string().required('Campo obligatorio'),
+        password: Yup.string().required('Required field'),
       }),
   );
   
@@ -53,7 +53,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
     })
 
   return (
-    <AuthLayout title={'Inicio de Sesion'}>
+    <AuthLayout title={'Login'}>
         <Box component={"form"} onSubmit={handleSubmit} p={2} sx={{ 
           width: {xs: '100%', md: '20%'},
           margin: '0 auto',
@@ -68,10 +68,10 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
                 onChange={({ target }: any) => {
                   setFieldValue('email', target.value);
                 }}
-                placeholder="Email"
+                placeholder="E-mail"
                 type="email" 
                 value={values?.email}
-                label="correo" 
+                label="e-mail" 
                 error={!!errors.email}
                 helperText={(errors?.email)?.toString()}
                 />
@@ -79,7 +79,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
             </Grid>
             <Grid item xs={12} sm={12} sx={{ mt: '10px'}}>
               <TextField
-                label="contraseña" 
+                label="password" 
                 type="password" 
                 placeholder="Password"
                 fullWidth
@@ -107,7 +107,7 @@ import ErrorExpositure from "../helpers/ErrorExpositure";
 
               <Grid container direction={'row'} justifyContent={'end'} sx={{ mt: 2}}>
                 <Link component={LinkRouter} to={'/auth/register'} onClick={() => dispatch(startCleanAuthMessage() as any)}>
-                  <Typography sx={{ color: theme => theme?.palette?.primary?.main }}>Crear cuenta</Typography>
+                  <Typography sx={{ color: theme => theme?.palette?.primary?.main }}>Sign up</Typography>
                 </Link>
               </Grid>
             </Grid>

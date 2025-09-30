@@ -31,27 +31,27 @@ import axios from "axios";
   const getValidationSchema = () =>
     Yup.lazy(() =>
       Yup.object().shape({
-        contact: Yup.string().email('Ingrese un email').required('Campo obligatorio').trim(),
-        postalCode: Yup.number().required('Campo obligatorio'),
-        shippingMethod: Yup.string().required('Campo obligatorio').trim(),
+        contact: Yup.string().email('Type a email').required('Required field').trim(),
+        postalCode: Yup.number().required('Required field'),
+        shippingMethod: Yup.string().required('Required field').trim(),
         notes: Yup.string().trim(),
-        paymentMethod: Yup.string().required('Campo obligatorio').trim(),
+        paymentMethod: Yup.string().required('Required field').trim(),
         creditCardNumber: Yup.number()
         .when('paymentMethod', {
             is: (value: string) => value !== 'mercadopago',
-            then: (schema) => schema.required('Número de tarjeta requerido'),
+            then: (schema) => schema.required('Card number required'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardOwner: Yup.string()
         .when('paymentMethod', {
             is: (value: string) => value !== 'mercadopago',
-            then: (schema) => schema.required('Nombre del titular requerido'),
+            then: (schema) => schema.required('Card owner required'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardExpirationDate: Yup.string()
         .when('paymentMethod', {
             is: (value: string) => value !== 'mercadopago',
-            then: (schema) => schema.required('Fecha de expiración requerida'),
+            then: (schema) => schema.required('expiration date required'),
             otherwise: (schema) => schema.notRequired(),
         }),
         creditCardCvv: Yup.string()
@@ -60,8 +60,8 @@ import axios from "axios";
             then: (schema) => schema.required('CVV requerido'),
             otherwise: (schema) => schema.notRequired(),
         }),
-        identificationType: Yup.string().required('Campo obligatorio'),
-        identificationNumber: Yup.string().required('Campo obligatorio'),
+        identificationType: Yup.string().required('Required field'),
+        identificationNumber: Yup.string().required('Required field'),
     }),
   );
 
@@ -71,7 +71,7 @@ import axios from "axios";
     return (
       <Grid item xs={12} padding={2}>
         <Typography color="red" textAlign="center">
-          Agrega productos al carrito para poder comprar
+          Add products to the cart to be able to buy
         </Typography>
       </Grid>
     );
@@ -85,9 +85,9 @@ import axios from "axios";
         <Button
           variant="contained"
           type="submit"
-          sx={{ width: { xs: "50%", md: "20%" } }}
+          sx={{ width: { xs: "50%", md: "20%", color: theme => theme?.custom?.white } }}
         >
-          Finalizar compra
+          Complete
         </Button>
       )}
     </Grid>
@@ -115,7 +115,7 @@ const PaymentMethodPage = () => {
         setPreferenceId(response.data?.id || null);
         setStartPurchase(true);
     } catch (error) {
-        console.error("Error creando preferenceId:", error);
+        console.error("Error while creating preferenceId:", error);
     }
     };
 
@@ -169,7 +169,7 @@ const PaymentMethodPage = () => {
                                     overflowWrap: 'break-word',
                                 }}
                                 >
-                                    COMPLETAR COMPRA
+                                 Complete Purchase
                                 </Typography>
                             </Box>
                             </Grid>
@@ -189,7 +189,7 @@ const PaymentMethodPage = () => {
 
                         <Grid item xs={12} sm={6}>
                             <TextField
-                            label="Código Postal"
+                            label="Postal Code"
                             type="number"
                             placeholder="5522"
                             fullWidth
@@ -209,7 +209,7 @@ const PaymentMethodPage = () => {
                             renderInput={(params) => (
                                 <TextField
                                 {...params}
-                                label="Método de envío"
+                                label="Shipping Method"
                                 error={!!errors.shippingMethod}
                                 helperText={errors.shippingMethod?.toString()}
                                 />
@@ -227,7 +227,7 @@ const PaymentMethodPage = () => {
                                 renderInput={(params) => (
                                     <TextField
                                     {...params}
-                                    label="Método de pago"
+                                    label="Payment Method"
                                     error={!!errors.paymentMethod}
                                     helperText={errors.paymentMethod?.toString()}
                                     />
@@ -239,7 +239,7 @@ const PaymentMethodPage = () => {
 
                             <Grid item xs={12}>
                                 <TextField
-                                label="Notas"
+                                label="Notes"
                                 multiline
                                 rows={4}
                                 fullWidth
@@ -252,7 +252,7 @@ const PaymentMethodPage = () => {
                             <>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                label="Número de tarjeta"
+                                label="Card number"
                                 type="number"
                                 placeholder="4111 1111 1111 1111"
                                 fullWidth
@@ -266,7 +266,7 @@ const PaymentMethodPage = () => {
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                label="Titular de la tarjeta"
+                                label="Card owner"
                                 placeholder="Jhon Doe"
                                 fullWidth
                                 name="creditCardOwner"
@@ -279,7 +279,7 @@ const PaymentMethodPage = () => {
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                label="Fecha de expiración"
+                                label="Expiration date"
                                 type="date"
                                 InputLabelProps={{
                                     shrink: true,
@@ -317,7 +317,7 @@ const PaymentMethodPage = () => {
                                 renderInput={(params) => (
                                     <TextField
                                     {...params}
-                                    label="Tipo de identificación"
+                                    label="Identification type"
                                     error={!!errors.identificationType}
                                     helperText={errors.identificationType?.toString()}
                                     />
@@ -329,7 +329,7 @@ const PaymentMethodPage = () => {
 
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                label="Número de documento"
+                                label="Id number"
                                 placeholder="12345678"
                                 fullWidth
                                 name="identificationNumber"

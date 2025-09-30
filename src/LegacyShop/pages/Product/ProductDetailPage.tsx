@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
   const action = (
     <>
       <Button color="secondary" size="small" onClick={handleClose}>
-        Cerrar
+        Close
       </Button>
       <IconButton
         size="small"
@@ -84,7 +84,7 @@ const ProductDetailPage = () => {
                 >
                     shopping_cart
                 </span>
-                Agregado al carrito
+                Added to cart
                 </span>
             }
             action={action}
@@ -153,7 +153,7 @@ const ProductDetailPage = () => {
                                       color: theme => theme?.palette?.primary?.main,
                                       justifySelf: 'end'
                                   }}>
-                                      Precio sin impuestos ${`${price - (price * 12 / 100)}`}
+                                      Price without taxes ${`${price - (price * 12 / 100)}`}
                               </Typography>
                               )
                             }
@@ -161,18 +161,18 @@ const ProductDetailPage = () => {
                         <hr style={{ width: '100%'}}/>
                         <Grid sx={{margin: '10px 0px'}} width={'100%'}>
                             <Typography sx={{ display: 'flex', alignItems: 'center', fontSize: theme => theme?.typography?.body1?.fontSize, gap: 1, }}>
-                                    Envio gratis superando los 100.000
+                                    Free shipping for orders over 100.000
                             </Typography>  
 
                             <Grid display={'flex'} flexDirection={'column'}>
                                 <Typography sx={{fontSize: theme => theme?.typography?.body1?.fontSize, marginTop: '20px'}}>
-                                    Calcular envio
+                                    Calculate shipping
                                 </Typography>
 
                                 <Grid display={'flex'} flexDirection={'row'} gap={'10px'}>
                                     <Grid xs={12} sm={6}>
                                         <TextField
-                                            label="correo" 
+                                            label="E-mail" 
                                             type="text" 
                                             placeholder="0134"
                                             fullWidth
@@ -189,7 +189,7 @@ const ProductDetailPage = () => {
                                             width: '100%',
                                             height: '100%'
                                         }}>
-                                            CALCULAR
+                                            CALCULATE
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -200,13 +200,13 @@ const ProductDetailPage = () => {
                                     target="_blank"
                                     sx={{ margin: '0.5em 0em'}}
                                 >
-                                    <Typography>No sé mi codigo postal</Typography>
+                                    <Typography>I don't know my zip code</Typography>
                                 </Link>
                             </Grid> 
                         </Grid>
                         <hr style={{ width: '100%'}}/>
                         <Grid xs={12}>
-                            <Typography sx={{fontSize: theme => theme?.typography?.body1?.fontSize}}>Talle: <b>{size?.toLocaleUpperCase()}</b></Typography>
+                            <Typography sx={{fontSize: theme => theme?.typography?.body1?.fontSize}}>Size: <b>{size?.toLocaleUpperCase()}</b></Typography>
                         </Grid>
                         <hr style={{ width: '100%'}}/>
                         <Grid sx={{ width: {xs: '80%', md: '100%', margin: '0px auto'}}}>
@@ -218,7 +218,7 @@ const ProductDetailPage = () => {
                                     fontSize: theme => theme?.typography?.h5?.fontSize,
                                     width: '100%'
                                 }}>
-                                Comprar
+                                Buy
                             </Button>
                         </Grid>
                         <hr style={{ width: '100%'}}/>
@@ -231,7 +231,7 @@ const ProductDetailPage = () => {
                                     margin: '10px 0px' 
                                 }}
                                 >
-                                Ver medios de pago
+                                See payment methods
                             </Typography>
                         </Grid>
                         <hr style={{ width: '100%'}}/>
@@ -247,9 +247,9 @@ const ProductDetailPage = () => {
                                 </Grid>
                                 <Grid xs={11}>
                                     <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>
-                                        Compra protegida
+                                        Protected purchase
                                     </Typography>
-                                    <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>Tus datos cuidados durante toda la compra.</Typography>
+                                    <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>your data is taken care of throughout the purchase.</Typography>
                                 </Grid>
                             </Grid>
                             <Grid container display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
@@ -263,9 +263,9 @@ const ProductDetailPage = () => {
                                 </Grid>
                                 <Grid xs={11}>
                                     <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>
-                                        Cambios y devoluciones
+                                        Changes and returns
                                     </Typography>
-                                    <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>Si no te gusta, podés cambiarlo por otro o devolverlo.</Typography>
+                                    <Typography sx={{ fontSize: theme => theme?.typography?.body1?.fontSize}}>If you don't like it , you can exchange it for another or return it.</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>

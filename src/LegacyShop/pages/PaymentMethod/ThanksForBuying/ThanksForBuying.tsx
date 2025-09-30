@@ -34,9 +34,9 @@ const ThanksForBuying = ({ paymentState, dispatch, userId }: ThanksForBuyingProp
         textAlign: "center",
       }}
     >
-      {paymentState === "approved" && <span>¡Gracias por tu compra!</span>}
-      {paymentState === "fail" && <span>¡Algo salió mal, inténtalo más tarde!</span>}
-      {paymentState === "pending" && <span>Procesando pago...</span>}
+      {paymentState === "approved" && <span>¡Thanks for Buying!</span>}
+      {paymentState === "fail" && <span>¡Uups, something went wrong, try again later!</span>}
+      {paymentState === "pending" && <span>Processing...</span>}
     </Box>
   );
 };

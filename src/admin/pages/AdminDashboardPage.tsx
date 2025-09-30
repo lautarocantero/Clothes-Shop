@@ -73,9 +73,9 @@ const AdminDashboardPage = () => {
               Admin Dashboard
             </Typography>
           </Grid>
-          <AdminActions links={AdminPosibleActionsShop} title={"Tienda"} />
-          <AdminActions links={AdminPosibleActionsUser} title={"Usuarios"} />
-          <AdminActions links={AdminPosibleActionsAdmin} title={"Administradores"} />
+          <AdminActions links={AdminPosibleActionsShop} title={"Shop"} />
+          <AdminActions links={AdminPosibleActionsUser} title={"Users"} />
+          <AdminActions links={AdminPosibleActionsAdmin} title={"Admin"} />
         </Grid>
       </Box>
     </LegacyShopLayout>

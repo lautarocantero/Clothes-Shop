@@ -1,13 +1,13 @@
 
 export const linkArrayAdmin = [
-  { linkText: 'Tienda', linkUrl: '/'},
-  { linkText: 'Mi carrito', linkUrl: '/mi-carrito'},
+  { linkText: 'Shop', linkUrl: '/'},
+  { linkText: 'My cart', linkUrl: '/mi-carrito'},
   { linkText: 'Admin', linkUrl: '/admin'}
 ]
 
 export const linkArrayUser = [
-  { linkText: 'Tienda', linkUrl: '/'},
-  { linkText: 'Mi carrito', linkUrl: '/mi-carrito'}
+  { linkText: 'Shop', linkUrl: '/'},
+  { linkText: 'My cart', linkUrl: '/mi-carrito'}
 ]
 
 export const paymentMethods = [

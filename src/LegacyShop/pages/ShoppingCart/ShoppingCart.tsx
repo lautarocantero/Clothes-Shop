@@ -21,7 +21,7 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
             colour: theme => theme?.palette?.text?.secondary,
           }}
         >
-          Aún no agregaste productos al carrito.
+          You haven't added any products to your cart yet.
         </Typography>
       </Grid>
     );
@@ -102,7 +102,7 @@ const ProductsExhibitor = ({ products, onRemoveProduct }: ProductsExhibitorProps
             </Typography>
 
             <Button
-              onClick={() => onRemoveProduct({ productId: id, cart: products })}sx={{alignSelf: 'flex-start',border: '1px solid',borderColor: theme => theme?.palette?.primary?.main,colour: theme => theme?.palette?.primary?.main,fontSize: theme => theme?.typography?.caption?.fontSize,}}>Eliminar</Button>
+              onClick={() => onRemoveProduct({ productId: id, cart: products })}sx={{alignSelf: 'flex-start',border: '1px solid',borderColor: theme => theme?.palette?.primary?.main,colour: theme => theme?.palette?.primary?.main,fontSize: theme => theme?.typography?.caption?.fontSize,}}>Remove</Button>
 
             <Box />
 
@@ -134,7 +134,7 @@ const CartFooter = ({ cart, handleBuyCart }: CartFooterProps) => {
         <Button  
           onClick={handleBuyCart}
           sx={{ backgroundColor: theme => theme?.palette?.primary?.main, color: theme => theme?.custom?.white, padding: 1.5}}>
-          Comprar
+          Buy
         </Button>
       </Grid>
     </Grid>
@@ -191,7 +191,7 @@ const ShoppingCartPage = () => {
                 justifyContent: "center",
               }}
             >
-              <strong>Mi carrito</strong>
+              <strong>My cart</strong>
             </Typography>
           </Grid>
             <ProductsExhibitor products={cart} onRemoveProduct={removeFromCart} />

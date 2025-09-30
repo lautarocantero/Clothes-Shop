@@ -6,5 +6,5 @@ export   const getFirebaseErrorMessage = (errorMessage: string): string => {
         return firebaseAuthErrors[key];
       }
     }
-    return 'Ocurrió un error inesperado.';
+    return 'Uups something went wrong, try again.';
   };

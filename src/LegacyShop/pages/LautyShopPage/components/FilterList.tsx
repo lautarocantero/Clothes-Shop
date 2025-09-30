@@ -70,7 +70,7 @@ const FilterList = ({ items, filterTitle }: { items: any[], filterTitle: string 
             }}
             onClick={() => setShowAll(true)}
           >
-            <Typography component={'span'} sx={{ fontWeight: 'bold' }}>Ver más</Typography>
+            <Typography component={'span'} sx={{ fontWeight: 'bold' }}>See more</Typography>
           </Button>
         </li>
       )}
@@ -85,7 +85,7 @@ const FilterList = ({ items, filterTitle }: { items: any[], filterTitle: string 
             }}
             onClick={() => setShowAll(false)}
           >
-            <Typography component={'span'} sx={{ fontWeight: 'bold' }}>Ver menos</Typography>
+            <Typography component={'span'} sx={{ fontWeight: 'bold' }}>See less</Typography>
           </Button>
         </li>
       )}

@@ -14,7 +14,7 @@ export const paymentMethods = [
 
 export const identificationTypes = [
     { value: 'dni', label: 'dni'},
-    { value: 'cedula', label: 'cédula'},
+    { value: 'cedula', label: 'id'},
     { value: 'lc', label: 'L.C.'},
     { value: 'le', label: 'L.E.'},
 ]

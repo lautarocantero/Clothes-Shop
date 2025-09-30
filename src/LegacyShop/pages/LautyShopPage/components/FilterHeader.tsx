@@ -27,7 +27,7 @@ const RemoveFilter = () => {
         },
       }}
     >
-      Borrar Filtros
+      Clean Filters
     </Button>
   );
 };
@@ -36,7 +36,7 @@ const FilterHeader = () => {
 
   return (
     <Grid container display={'flex'} gap={2}>
-      <Typography component={'h2'} sx={{ fontSize: theme => theme?.typography?.h2?.fontSize}}>Filtros</Typography>
+      <Typography component={'h2'} sx={{ fontSize: theme => theme?.typography?.h2?.fontSize}}>Filter</Typography>
       <RemoveFilter />
     </Grid>
   );

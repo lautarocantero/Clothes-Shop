@@ -18,7 +18,7 @@ const ProductsFilter = () => {
         <FilterHeader />
         <hr />
         <FilterList items={typesData} filterTitle='type'/>
-        <Typography component={'h4'} sx={{ fontSize: theme => theme?.typography?.h4?.fontSize}}>Talle</Typography>
+        <Typography component={'h4'} sx={{ fontSize: theme => theme?.typography?.h4?.fontSize}}>Size</Typography>
         <hr />
         <FilterList items={sizesData} filterTitle='size'/>
       </Box>

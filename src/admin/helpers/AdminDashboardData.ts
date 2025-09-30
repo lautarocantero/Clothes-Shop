@@ -1,19 +1,19 @@
 import type { actionsType } from "../types/AdminDashboardTypes"
 
 export const AdminPosibleActionsShop: actionsType[] = [
-  { linkTitle: 'Crear Producto', link: '/', },
-  { linkTitle: 'Editar Producto', link: '/', },
-  { linkTitle: 'Eliminar Producto', link: '/', },
+  { linkTitle: 'Create Product', link: '/', },
+  { linkTitle: 'Edit Producto', link: '/', },
+  { linkTitle: 'Delete Producto', link: '/', },
 ]
 
 export const AdminPosibleActionsUser: actionsType[] = [
-  { linkTitle: 'Crear usuario', link: '/', },
-  { linkTitle: 'Editar usuario', link: '/', },
-  { linkTitle: 'Eliminar usuario', link: '/', },
+  { linkTitle: 'Create usuario', link: '/', },
+  { linkTitle: 'Edit usuario', link: '/', },
+  { linkTitle: 'Delete usuario', link: '/', },
 ]
 
 export const AdminPosibleActionsAdmin: actionsType[] = [
-  { linkTitle: 'Crear nuevo administrador', link: '/', },
-  { linkTitle: 'Editar administrador', link: '/', },
-  { linkTitle: 'Eliminar administrador', link: '/', },
+  { linkTitle: 'Create new admin', link: '/', },
+  { linkTitle: 'Edit admin', link: '/', },
+  { linkTitle: 'Delete admin', link: '/', },
 ]
